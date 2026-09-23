@@ -95,6 +95,12 @@
     width: 100%; font-family: "Source Serif 4", Georgia, serif; font-size: 16px; color: var(--ink);
     background: var(--surface); border: 1px solid var(--line-strong); border-radius: 3px; padding: 10px 12px;
   }
+  .mode-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
+  .mode-toggle button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 8px 16px; border: 1px solid var(--line-strong);
+    border-radius: 20px; background: none; color: var(--ink-soft); cursor: pointer; flex: 1;
+  }
+  .mode-toggle button.active { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
   .add-back-link {
     display: block; margin: 10px auto 0; font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
     color: var(--ink-soft); background: none; border: none; text-decoration: underline;
@@ -158,6 +164,12 @@
   .meta-from { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
   .section-head { display: flex; justify-content: space-between; align-items: baseline; margin: 24px 0 12px; }
   .section-head .st { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.4px; color: var(--ink-soft); text-transform: uppercase; }
+  .combo-wrap { border: 1px solid var(--line); border-radius: 5px; padding: 16px 14px; background: var(--paper-2); }
+  .combo-chart-block { padding-bottom: 8px; border-bottom: 1px dashed var(--line-strong); margin-bottom: 4px; }
+  .reroll-btn {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--accent); background: none;
+    border: none; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; padding: 0;
+  }
   .quick-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
   .quick-add-row input { flex: 1; font-size: 13.5px; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 3px; padding: 9px 10px; }
   .quick-add-row button {
@@ -238,6 +250,7 @@
     font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-soft); background: none;
     border: none; cursor: pointer; padding: 0;
   }
+  .lremove.armed, .danger-link.armed { color: var(--danger); font-weight: 600; }
   .landings-empty { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-soft); padding: 6px 0; }
 
   .practice-controls { display: flex; justify-content: center; gap: 10px; margin-top: 22px; }
@@ -266,7 +279,8 @@
   <nav class="tabs">
     <button data-tab="practice" class="active">practice</button>
     <button data-tab="phrases">phrases</button>
-    <button data-tab="add">add phrase</button>
+    <button data-tab="charts">charts</button>
+    <button data-tab="add">add</button>
   </nav>
 </header>
 
@@ -279,7 +293,7 @@
 
   <!-- PHRASES LIST -->
   <section id="phrases">
-    <div class="phrase-controls">
+    <div class="phrase-controls" id="phraseControlsRow">
       <input type="text" id="phraseSearchInput" class="mono" placeholder="search phrases&hellip;">
       <div class="sort-toggle">
         <button type="button" data-sort="recent" class="active">recent</button>
@@ -291,28 +305,78 @@
 
   <!-- ADD PHRASE -->
   <section id="add">
-    <div class="field">
-      <label>phrase scan</label>
-      <div class="upload-box" id="frontBox">
-        <img id="frontPreviewImg" alt="front preview" style="display:none;">
-        <span class="plus" id="frontPlus">+<br>upload scan<br>(PDF or photo)</span>
-        <input type="file" id="frontInput" accept="application/pdf,.pdf,image/*">
+    <div class="mode-toggle" id="addTypeToggle">
+      <button type="button" data-type="phrase" class="active">phrase</button>
+      <button type="button" data-type="chart">chart</button>
+    </div>
+
+    <div id="addPhraseForm">
+      <div class="field">
+        <label>phrase scan</label>
+        <div class="upload-box" id="frontBox">
+          <img id="frontPreviewImg" alt="front preview" style="display:none;">
+          <span class="plus" id="frontPlus">+<br>upload scan<br>(PDF or photo)</span>
+          <input type="file" id="frontInput" accept="application/pdf,.pdf,image/*">
+        </div>
+        <button type="button" class="add-back-link" id="addBackLink">+ add a back scan (optional)</button>
+        <div id="backUploadWrap" style="display:none; margin-top:10px;">
+          <div class="upload-box" id="backBox">
+            <img id="backPreviewImg" alt="back preview" style="display:none;">
+            <span class="plus" id="backPlus">+<br>upload back<br>(PDF or photo)</span>
+            <input type="file" id="backInput" accept="application/pdf,.pdf,image/*">
+          </div>
+        </div>
       </div>
-      <button type="button" class="add-back-link" id="addBackLink">+ add a back scan (optional)</button>
-      <div id="backUploadWrap" style="display:none; margin-top:10px;">
-        <div class="upload-box" id="backBox">
-          <img id="backPreviewImg" alt="back preview" style="display:none;">
-          <span class="plus" id="backPlus">+<br>upload back<br>(PDF or photo)</span>
-          <input type="file" id="backInput" accept="application/pdf,.pdf,image/*">
+      <div class="field">
+        <label>phrase name</label>
+        <input type="text" id="nameInput" placeholder="e.g. Autumn Leaves, bar 5 turnaround">
+      </div>
+      <div class="save-row">
+        <button class="primary" id="saveBtn">Save phrase</button>
+      </div>
+    </div>
+
+    <div id="addChartForm" style="display:none;">
+      <div class="field">
+        <label>chart scan</label>
+        <div class="upload-box" id="chartUploadBox" style="aspect-ratio:auto; height:90px;">
+          <span class="plus" id="chartUploadPlus">+<br>upload chart (PDF or photo)</span>
+        </div>
+      </div>
+      <div id="chartPendingWrap" style="display:none;">
+        <div class="attach-row" style="margin-bottom:8px;"><span class="mono" id="chartPendingLabel"></span></div>
+        <div class="field">
+          <label>chart name</label>
+          <input type="text" id="chartNameInput" placeholder="e.g. Autumn Leaves changes">
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button type="button" id="chartSaveBtn" class="primary" style="flex:1;">save chart</button>
+          <button type="button" id="chartCancelBtn" class="ghost">cancel</button>
         </div>
       </div>
     </div>
-    <div class="field">
-      <label>phrase name</label>
-      <input type="text" id="nameInput" placeholder="e.g. Autumn Leaves, bar 5 turnaround">
+  </section>
+
+  <!-- CHARTS LIST -->
+  <section id="charts">
+    <div class="phrase-controls" id="chartControlsRow">
+      <input type="text" id="chartSearchInput" class="mono" placeholder="search charts&hellip;">
+      <div class="sort-toggle">
+        <button type="button" data-sort="recent" class="active">recent</button>
+        <button type="button" data-sort="az">a&ndash;z</button>
+      </div>
     </div>
-    <div class="save-row">
-      <button class="primary" id="saveBtn">Save phrase</button>
+    <div id="chartListArea"></div>
+  </section>
+
+  <!-- CHART DETAIL -->
+  <section id="chartDetail">
+    <button class="detail-back" id="chartDetailBack">&larr; charts</button>
+    <div class="meta-name" id="chartDetailName" style="margin-bottom:14px;"></div>
+    <div class="motif-image-box" id="chartDetailMainImage" style="cursor:zoom-in;"></div>
+    <div id="chartDetailExtraPages"></div>
+    <div class="danger-row">
+      <button class="danger-link" id="deleteChartBtn">delete this chart</button>
     </div>
   </section>
 
@@ -371,42 +435,46 @@
   // ---------- IndexedDB ----------
   var DB_NAME = "pattern_deck_db";
   var STORE = "cards"; // kept as-is so existing data (pre-restructure) is found & migrated
+  var CHART_STORE = "charts";
   var db = null;
 
   function openDB() {
     return new Promise(function (resolve, reject) {
-      var req = indexedDB.open(DB_NAME, 1);
+      var req = indexedDB.open(DB_NAME, 2);
       req.onupgradeneeded = function (e) {
         var d = e.target.result;
         if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, { keyPath: "id" });
+        if (!d.objectStoreNames.contains(CHART_STORE)) d.createObjectStore(CHART_STORE, { keyPath: "id" });
       };
       req.onsuccess = function (e) { resolve(e.target.result); };
       req.onerror = function (e) { reject(e); };
     });
   }
-  function txStore(mode) { return db.transaction(STORE, mode).objectStore(STORE); }
-  function dbGetAll() {
+  function txStore(storeName, mode) { return db.transaction(storeName, mode).objectStore(storeName); }
+  function dbGetAll(storeName) {
     return new Promise(function (resolve, reject) {
       try {
-        var req = txStore("readonly").getAll();
+        var req = txStore(storeName, "readonly").getAll();
         req.onsuccess = function () { resolve(req.result || []); };
         req.onerror = function () { reject(req.error); };
       } catch (err) { reject(err); }
     });
   }
-  function dbPut(obj) {
+  function dbPut(obj, storeName) {
+    storeName = storeName || STORE;
     return new Promise(function (resolve, reject) {
       try {
-        var req = txStore("readwrite").put(obj);
+        var req = txStore(storeName, "readwrite").put(obj);
         req.onsuccess = function () { resolve(); };
         req.onerror = function () { reject(req.error); };
       } catch (err) { reject(err); }
     });
   }
-  function dbDelete(id) {
+  function dbDelete(id, storeName) {
+    storeName = storeName || STORE;
     return new Promise(function (resolve, reject) {
       try {
-        var req = txStore("readwrite").delete(id);
+        var req = txStore(storeName, "readwrite").delete(id);
         req.onsuccess = function () { resolve(); };
         req.onerror = function () { reject(req.error); };
       } catch (err) { reject(err); }
@@ -440,6 +508,7 @@
 
   // ---------- state ----------
   var phrases = [];
+  var charts = [];
   var pullSize = 1;
   var currentPull = []; // array of {phraseId, motifId}
   var pendingFront = null, pendingBack = null;
@@ -459,6 +528,29 @@
   function findPhrase(id) { return phrases.find(function (p) { return p.id === id; }); }
   function findMotif(phrase, id) { return (phrase && phrase.motifs || []).find(function (m) { return m.id === id; }); }
   function findLanding(motif, at) { return (motif && motif.landings || []).find(function (l) { return l.at === at; }); }
+  function findChart(id) { return charts.find(function (c) { return c.id === id; }); }
+
+  // Two-tap confirm (avoids window.confirm(), which some embedded/sandboxed
+  // viewers silently block, making destructive buttons look "dead").
+  function confirmClick(btn, armedLabel, action) {
+    if (btn.getAttribute("data-armed") === "1") {
+      clearTimeout(btn._armTimer);
+      btn.removeAttribute("data-armed");
+      btn.textContent = btn.getAttribute("data-orig-text") || btn.textContent;
+      btn.classList.remove("armed");
+      action();
+    } else {
+      btn.setAttribute("data-orig-text", btn.textContent);
+      btn.setAttribute("data-armed", "1");
+      btn.textContent = armedLabel;
+      btn.classList.add("armed");
+      btn._armTimer = setTimeout(function () {
+        btn.removeAttribute("data-armed");
+        btn.textContent = btn.getAttribute("data-orig-text");
+        btn.classList.remove("armed");
+      }, 4000);
+    }
+  }
 
   function escapeHtml(str) {
     return String(str)
@@ -585,19 +677,36 @@
     tabButtons.forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-tab") === tab); });
     if (tab === "practice") renderPractice();
     if (tab === "phrases") renderPhraseList();
+    if (tab === "charts") renderChartList();
   }
 
   document.getElementById("phraseSearchInput").addEventListener("input", function () {
     phraseSearchQuery = this.value;
     renderPhraseList();
   });
-  document.querySelectorAll(".sort-toggle button").forEach(function (btn) {
+  document.querySelectorAll("#phraseControlsRow .sort-toggle button").forEach(function (btn) {
     btn.addEventListener("click", function () {
       phraseSortMode = btn.getAttribute("data-sort");
-      document.querySelectorAll(".sort-toggle button").forEach(function (b) {
+      document.querySelectorAll("#phraseControlsRow .sort-toggle button").forEach(function (b) {
         b.classList.toggle("active", b === btn);
       });
       renderPhraseList();
+    });
+  });
+
+  var chartSearchQuery = "";
+  var chartSortMode = "recent";
+  document.getElementById("chartSearchInput").addEventListener("input", function () {
+    chartSearchQuery = this.value;
+    renderChartList();
+  });
+  document.querySelectorAll("#chartControlsRow .sort-toggle button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      chartSortMode = btn.getAttribute("data-sort");
+      document.querySelectorAll("#chartControlsRow .sort-toggle button").forEach(function (b) {
+        b.classList.toggle("active", b === btn);
+      });
+      renderChartList();
     });
   });
 
@@ -606,7 +715,8 @@
     phrases.forEach(function (p) { motifCount += (p.motifs || []).length; });
     document.getElementById("deckCount").textContent =
       phrases.length + (phrases.length === 1 ? " phrase" : " phrases") + " \u00b7 " +
-      motifCount + (motifCount === 1 ? " motif" : " motifs");
+      motifCount + (motifCount === 1 ? " motif" : " motifs") + " \u00b7 " +
+      charts.length + (charts.length === 1 ? " chart" : " charts");
   }
 
   // =========================================================
@@ -845,18 +955,31 @@
   function phrasesWithMotifs() {
     return phrases.filter(function (p) { return (p.motifs || []).length > 0; });
   }
-  function pickRandomPhrases(n) {
+  function randomPhraseId(excludeId) {
     var pool = phrasesWithMotifs().map(function (p) { return p.id; });
+    if (pool.length === 0) return null;
+    if (excludeId && pool.length > 1) pool = pool.filter(function (id) { return id !== excludeId; });
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  function randomChartId(excludeId) {
+    var pool = charts.map(function (c) { return c.id; });
+    if (pool.length === 0) return null;
+    if (excludeId && pool.length > 1) pool = pool.filter(function (id) { return id !== excludeId; });
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  function pickRandomCombos(n) {
+    var phrasePool = phrasesWithMotifs().map(function (p) { return p.id; });
+    n = Math.min(n, phrasePool.length);
     var picked = [];
-    n = Math.min(n, pool.length);
     for (var i = 0; i < n; i++) {
-      var idx = Math.floor(Math.random() * pool.length);
-      picked.push(pool[idx]);
-      pool.splice(idx, 1);
+      var idx = Math.floor(Math.random() * phrasePool.length);
+      var phraseId = phrasePool[idx];
+      phrasePool.splice(idx, 1);
+      picked.push({ phraseId: phraseId, chartId: randomChartId() });
     }
     return picked;
   }
-  function newPull() { currentPull = pickRandomPhrases(pullSize); renderPractice(); }
+  function newPull() { currentPull = pickRandomCombos(pullSize); renderPractice(); }
 
   function renderPractice() {
     var area = document.getElementById("practiceArea");
@@ -870,19 +993,68 @@
       return;
     }
 
-    if (currentPull.length === 0) currentPull = pickRandomPhrases(pullSize);
-    currentPull = currentPull.filter(function (id) {
-      var p = findPhrase(id);
+    if (currentPull.length === 0) currentPull = pickRandomCombos(pullSize);
+    currentPull = currentPull.filter(function (ref) {
+      var p = findPhrase(ref.phraseId);
       return p && (p.motifs || []).length > 0;
     });
-    if (currentPull.length === 0) currentPull = pickRandomPhrases(pullSize);
+    if (currentPull.length === 0) currentPull = pickRandomCombos(pullSize);
 
-    currentPull.forEach(function (phraseId, i) {
-      var phrase = findPhrase(phraseId);
+    currentPull.forEach(function (ref, i) {
+      var phrase = findPhrase(ref.phraseId);
       if (!phrase) return;
-      var block = document.createElement("div");
-      if (i > 0) block.style.marginTop = "34px";
+      // if this combo was built before any charts existed, try again now that charts may exist
+      if (!ref.chartId && charts.length > 0) ref.chartId = randomChartId();
+      // if this combo's chart was since deleted, drop the stale reference (or pick a new one)
+      if (ref.chartId && !findChart(ref.chartId)) ref.chartId = charts.length > 0 ? randomChartId() : null;
+      var chart = ref.chartId ? findChart(ref.chartId) : null;
+      var comboWrap = document.createElement("div");
+      if (i > 0) comboWrap.style.marginTop = "34px";
+      comboWrap.className = "combo-wrap";
 
+      // ---- chart half ----
+      var chartBlock = document.createElement("div");
+      chartBlock.className = "combo-chart-block";
+      if (chart) {
+        var cimgs = chart.images || [];
+        chartBlock.innerHTML =
+          '<div class="section-head" style="margin-top:0;"><span class="st">chart</span>' +
+          '<button type="button" class="reroll-btn" data-role="reroll-chart">shuffle chart &#8635;</button></div>' +
+          '<div class="motif-block">' +
+          '<div class="motif-head" data-role="chart-toggle">' +
+          '<span class="mname">' + escapeHtml(chart.name || "untitled chart") + '</span>' +
+          '<span class="chev">&#9662;</span>' +
+          "</div>" +
+          '<div class="motif-panel" data-role="chart-panel">' +
+          '<div class="motif-image-box" data-role="chart-img"></div>' +
+          "</div></div>";
+        area.appendChild(comboWrap);
+        comboWrap.appendChild(chartBlock);
+        var cbox = chartBlock.querySelector('[data-role="chart-img"]');
+        if (cimgs.length) {
+          cbox.innerHTML = '<img src="' + cimgs[0] + '" alt="chart">';
+          cbox.onclick = function () { openImageNewTab(cimgs[0]); };
+        } else {
+          cbox.innerHTML = '<span class="placeholder">no scan</span>';
+        }
+        var chartHead = chartBlock.querySelector('[data-role="chart-toggle"]');
+        var chartPanel = chartBlock.querySelector('[data-role="chart-panel"]');
+        chartHead.addEventListener("click", function () {
+          var isOpen = chartPanel.classList.contains("open");
+          chartPanel.classList.toggle("open", !isOpen);
+          chartHead.classList.toggle("open", !isOpen);
+        });
+      } else {
+        chartBlock.innerHTML =
+          '<div class="section-head" style="margin-top:0;"><span class="st">chart</span></div>' +
+          '<div class="small mono" style="color:var(--ink-soft); margin-bottom:8px;">no charts added yet</div>';
+        area.appendChild(comboWrap);
+        comboWrap.appendChild(chartBlock);
+      }
+
+      // ---- phrase half ----
+      var phraseBlock = document.createElement("div");
+      phraseBlock.className = "combo-phrase-block";
       var imgsHtml = "";
       if (phrase.front || phrase.back) {
         imgsHtml = '<div class="detail-imgs">' +
@@ -890,23 +1062,37 @@
           (phrase.back ? '<div class="face-static" data-role="p-back"><img src="' + phrase.back + '" alt="back"></div>' : "") +
           "</div>";
       }
-      block.innerHTML =
+      phraseBlock.innerHTML =
+        '<div class="section-head"><span class="st">phrase</span>' +
+        '<button type="button" class="reroll-btn" data-role="reroll-phrase">shuffle phrase &#8635;</button></div>' +
         imgsHtml +
         '<div class="meta-name">' + escapeHtml(phrase.name || "untitled phrase") + '</div>' +
         (phrase.from ? '<div class="meta-from mono">' + escapeHtml(phrase.from) + '</div>' : "") +
         '<div class="section-head"><span class="st">motifs</span></div>' +
         '<div data-role="motifs-target"></div>';
-      area.appendChild(block);
+      comboWrap.appendChild(phraseBlock);
 
-      var pfront = block.querySelector('[data-role="p-front"]');
+      var pfront = phraseBlock.querySelector('[data-role="p-front"]');
       if (pfront) pfront.addEventListener("click", function () { openImageNewTab(phrase.front); });
-      var pback = block.querySelector('[data-role="p-back"]');
+      var pback = phraseBlock.querySelector('[data-role="p-back"]');
       if (pback) pback.addEventListener("click", function () { openImageNewTab(phrase.back); });
 
-      var motifsTarget = block.querySelector('[data-role="motifs-target"]');
+      var motifsTarget = phraseBlock.querySelector('[data-role="motifs-target"]');
       var motifs = (phrase.motifs || []).slice().sort(function (a, b) { return a.createdAt - b.createdAt; });
       motifs.forEach(function (m) {
         motifsTarget.appendChild(createMotifAccordionElement(phrase, m.id, { showRemove: false, startOpen: false }));
+      });
+
+      var rerollChartBtn = chartBlock.querySelector('[data-role="reroll-chart"]');
+      if (rerollChartBtn) rerollChartBtn.addEventListener("click", function () {
+        ref.chartId = randomChartId(ref.chartId);
+        renderPractice();
+      });
+      var rerollPhraseBtn = phraseBlock.querySelector('[data-role="reroll-phrase"]');
+      rerollPhraseBtn.addEventListener("click", function () {
+        var newId = randomPhraseId(ref.phraseId);
+        if (newId) ref.phraseId = newId;
+        renderPractice();
       });
     });
 
@@ -1060,14 +1246,16 @@
     if (opts.showRemove) {
       block.querySelector('[data-role="motif-remove"]').addEventListener("click", function (e) {
         e.stopPropagation();
-        if (!confirm("Remove this motif and its landing history?")) return;
-        var p = findPhrase(phrase.id);
-        p.motifs = (p.motifs || []).filter(function (m) { return m.id !== motifId; });
-        dbPut(p).then(function () {
-          renderCount();
-          renderMotifsList(p);
-          toast("motif removed");
-        }).catch(function () { toast("couldn't save"); });
+        var self = this;
+        confirmClick(self, "tap again to remove", function () {
+          var p = findPhrase(phrase.id);
+          p.motifs = (p.motifs || []).filter(function (m) { return m.id !== motifId; });
+          dbPut(p).then(function () {
+            renderCount();
+            renderMotifsList(p);
+            toast("motif removed");
+          }).catch(function () { toast("couldn't save"); });
+        });
       });
     }
 
@@ -1167,13 +1355,26 @@
 
   document.getElementById("deletePhraseBtn").addEventListener("click", function () {
     if (!currentPhraseId) return;
-    if (!confirm("Delete this phrase and all its motifs? This can't be undone.")) return;
-    dbDelete(currentPhraseId).then(function () {
-      phrases = phrases.filter(function (p) { return p.id !== currentPhraseId; });
-      renderCount();
-      switchTab("phrases");
-      toast("phrase deleted");
-    }).catch(function () { toast("couldn't delete"); });
+    confirmClick(this, "tap again to confirm delete", function () {
+      dbDelete(currentPhraseId).then(function () {
+        phrases = phrases.filter(function (p) { return p.id !== currentPhraseId; });
+        renderCount();
+        switchTab("phrases");
+        toast("phrase deleted");
+      }).catch(function () { toast("couldn't delete"); });
+    });
+  });
+
+  // =========================================================
+  // ADD: type toggle (phrase vs chart)
+  // =========================================================
+  document.querySelectorAll("#addTypeToggle button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#addTypeToggle button").forEach(function (b) { b.classList.toggle("active", b === btn); });
+      var type = btn.getAttribute("data-type");
+      document.getElementById("addPhraseForm").style.display = type === "phrase" ? "block" : "none";
+      document.getElementById("addChartForm").style.display = type === "chart" ? "block" : "none";
+    });
   });
 
   // =========================================================
@@ -1266,11 +1467,169 @@
     }).catch(function () { toast("couldn't save \u2014 storage may be full"); });
   });
 
+  // =========================================================
+  // ADD CHART / CHART LIST / CHART DETAIL
+  // =========================================================
+  var pendingChartImages = null, pendingChartFileName = null;
+  var currentChartId = null;
+
+  function resetChartPending() {
+    pendingChartImages = null; pendingChartFileName = null;
+    document.getElementById("chartPendingWrap").style.display = "none";
+    document.getElementById("chartUploadBox").style.display = "flex";
+    document.getElementById("chartNameInput").value = "";
+  }
+
+  document.getElementById("chartUploadBox").addEventListener("click", function () {
+    pickFile(function (urls, fileName) {
+      pendingChartImages = urls;
+      pendingChartFileName = fileName;
+      document.getElementById("chartPendingLabel").textContent =
+        fileName + (urls.length > 1 ? " (" + urls.length + " pages)" : "") + " \u2014 ready";
+      var guess = fileName ? fileName.replace(/\.[^.]+$/, "") : "";
+      var nameInput = document.getElementById("chartNameInput");
+      nameInput.value = guess;
+      document.getElementById("chartUploadBox").style.display = "none";
+      document.getElementById("chartPendingWrap").style.display = "block";
+      nameInput.focus();
+      nameInput.select();
+    });
+  });
+
+  document.getElementById("chartSaveBtn").addEventListener("click", function () {
+    if (!pendingChartImages) return;
+    var name = document.getElementById("chartNameInput").value.trim();
+    var chart = {
+      id: "chart_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+      name: name || "untitled chart",
+      images: pendingChartImages, fileName: pendingChartFileName,
+      createdAt: Date.now()
+    };
+    dbPut(chart, CHART_STORE).then(function () {
+      charts.push(chart);
+      renderCount();
+      resetChartPending();
+      toast("chart saved");
+    }).catch(function () { toast("couldn't save"); });
+  });
+
+  document.getElementById("chartCancelBtn").addEventListener("click", function () { resetChartPending(); });
+
+  function renderChartList() {
+    var list = document.getElementById("chartListArea");
+    if (charts.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="big">No charts yet</div><div class="small mono">add a chord chart / lead sheet to shuffle in with your phrases</div></div>';
+      return;
+    }
+    var q = chartSearchQuery.trim().toLowerCase();
+    var filtered = charts.filter(function (c) {
+      if (!q) return true;
+      return (c.name || "").toLowerCase().indexOf(q) !== -1;
+    });
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="big">No matches</div><div class="small mono">try a different search</div></div>';
+      return;
+    }
+    var sorted = filtered.slice().sort(function (a, b) {
+      if (chartSortMode === "az") {
+        return (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase());
+      }
+      return b.createdAt - a.createdAt;
+    });
+    list.innerHTML = sorted.map(function (c) {
+      var thumb = (c.images && c.images[0]) ? '<img src="' + c.images[0] + '" alt="">' : "";
+      var n = (c.images || []).length;
+      return (
+        '<div class="list-row" data-id="' + c.id + '">' +
+        '<div class="thumb">' + thumb + "</div>" +
+        '<div class="row-main">' +
+        '<div class="row-name">' + escapeHtml(c.name || "untitled chart") + "</div>" +
+        '<div class="row-count">' + n + (n === 1 ? " page" : " pages") + "</div>" +
+        "</div>" +
+        '<button type="button" class="lremove" data-role="chart-row-remove" data-id="' + c.id + '">remove</button>' +
+        "</div>"
+      );
+    }).join("");
+    list.querySelectorAll('[data-role="chart-row-remove"]').forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var id = btn.getAttribute("data-id");
+        confirmClick(btn, "tap again", function () {
+          dbDelete(id, CHART_STORE).then(function () {
+            charts = charts.filter(function (c) { return c.id !== id; });
+            renderCount();
+            renderChartList();
+            toast("chart deleted");
+          }).catch(function () { toast("couldn't delete"); });
+        });
+      });
+    });
+    list.querySelectorAll(".list-row").forEach(function (row) {
+      row.addEventListener("click", function () { openChartDetail(row.getAttribute("data-id")); });
+    });
+  }
+
+  function openChartDetail(id) {
+    var chart = findChart(id);
+    if (!chart) return;
+    currentChartId = id;
+    renderChartDetail();
+    document.querySelectorAll("main > section").forEach(function (s) { s.classList.remove("active"); });
+    document.getElementById("chartDetail").classList.add("active");
+  }
+
+  function renderChartDetail() {
+    var chart = findChart(currentChartId);
+    if (!chart) return;
+    document.getElementById("chartDetailName").textContent = chart.name || "untitled chart";
+    var imgs = chart.images || [];
+    var mainBox = document.getElementById("chartDetailMainImage");
+    if (imgs.length) {
+      mainBox.innerHTML = '<img src="' + imgs[0] + '" alt="chart">';
+      mainBox.onclick = function () { openImageNewTab(imgs[0]); };
+    } else {
+      mainBox.innerHTML = '<span class="placeholder">no scan</span>';
+      mainBox.onclick = null;
+    }
+    var extra = document.getElementById("chartDetailExtraPages");
+    if (imgs.length > 1) {
+      extra.innerHTML = '<div class="attached-files-list">' +
+        imgs.slice(1).map(function (u, i) {
+          var idx = i + 1;
+          var label = chart.fileName ? chart.fileName + " \u00b7 p" + (idx + 1) : "p" + (idx + 1);
+          return '<button type="button" class="file-line" data-idx="' + idx + '">' + escapeHtml(label) + '</button>';
+        }).join("") + "</div>";
+      extra.querySelectorAll(".file-line").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var idx = parseInt(btn.getAttribute("data-idx"), 10);
+          if (imgs[idx]) openImageNewTab(imgs[idx]);
+        });
+      });
+    } else {
+      extra.innerHTML = "";
+    }
+  }
+
+  document.getElementById("chartDetailBack").addEventListener("click", function () { switchTab("charts"); });
+
+  document.getElementById("deleteChartBtn").addEventListener("click", function () {
+    if (!currentChartId) return;
+    confirmClick(this, "tap again to confirm delete", function () {
+      dbDelete(currentChartId, CHART_STORE).then(function () {
+        charts = charts.filter(function (c) { return c.id !== currentChartId; });
+        renderCount();
+        switchTab("charts");
+        toast("chart deleted");
+      }).catch(function () { toast("couldn't delete"); });
+    });
+  });
+
   // ---------- init ----------
   openDB().then(function (d) {
     db = d;
-    return dbGetAll();
-  }).then(function (all) {
+    return Promise.all([dbGetAll(STORE), dbGetAll(CHART_STORE)]);
+  }).then(function (results) {
+    var all = results[0], allCharts = results[1];
     var migrated = [];
     var writes = [];
     (all || []).forEach(function (item) {
@@ -1280,6 +1639,7 @@
       if (wasFlat) writes.push(dbPut(p));
     });
     phrases = migrated;
+    charts = allCharts || [];
     renderCount();
     renderPractice();
     return Promise.all(writes);
