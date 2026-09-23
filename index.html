@@ -124,6 +124,17 @@
   }
 
   /* ---- phrase list ---- */
+  .phrase-controls { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .phrase-controls input {
+    flex: 1; font-size: 13.5px; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 3px; padding: 9px 10px;
+  }
+  .sort-toggle { display: flex; gap: 4px; flex-shrink: 0; }
+  .sort-toggle button {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; background: none;
+    border: 1px solid var(--line); color: var(--ink-soft); padding: 6px 9px; border-radius: 20px; cursor: pointer;
+  }
+  .sort-toggle button.active { color: var(--ink); border-color: var(--accent); }
   .list-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; align-items: center; }
   .thumb { width: 60px; height: 42px; flex-shrink: 0; border: 1px solid var(--line-strong); border-radius: 2px; overflow: hidden; background: var(--surface); display: flex; align-items: center; justify-content: center; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -268,6 +279,13 @@
 
   <!-- PHRASES LIST -->
   <section id="phrases">
+    <div class="phrase-controls">
+      <input type="text" id="phraseSearchInput" class="mono" placeholder="search phrases&hellip;">
+      <div class="sort-toggle">
+        <button type="button" data-sort="recent" class="active">recent</button>
+        <button type="button" data-sort="az">a&ndash;z</button>
+      </div>
+    </div>
     <div id="phraseListArea"></div>
   </section>
 
@@ -428,6 +446,8 @@
   var activeTab = "practice";
   var currentPhraseId = null;
   var pendingAttachResolve = null;
+  var phraseSearchQuery = "";
+  var phraseSortMode = "recent";
 
   function toast(msg) {
     var t = document.getElementById("toast");
@@ -566,6 +586,20 @@
     if (tab === "practice") renderPractice();
     if (tab === "phrases") renderPhraseList();
   }
+
+  document.getElementById("phraseSearchInput").addEventListener("input", function () {
+    phraseSearchQuery = this.value;
+    renderPhraseList();
+  });
+  document.querySelectorAll(".sort-toggle button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      phraseSortMode = btn.getAttribute("data-sort");
+      document.querySelectorAll(".sort-toggle button").forEach(function (b) {
+        b.classList.toggle("active", b === btn);
+      });
+      renderPhraseList();
+    });
+  });
 
   function renderCount() {
     var motifCount = 0;
@@ -902,7 +936,23 @@
       list.innerHTML = '<div class="empty"><div class="big">No phrases yet</div><div class="small mono">add your first transcribed phrase</div></div>';
       return;
     }
-    var sorted = phrases.slice().sort(function (a, b) { return b.createdAt - a.createdAt; });
+    var q = phraseSearchQuery.trim().toLowerCase();
+    var filtered = phrases.filter(function (p) {
+      if (!q) return true;
+      var name = (p.name || "").toLowerCase();
+      var motifNames = (p.motifs || []).map(function (m) { return (m.name || "").toLowerCase(); }).join(" ");
+      return name.indexOf(q) !== -1 || motifNames.indexOf(q) !== -1;
+    });
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="big">No matches</div><div class="small mono">try a different search</div></div>';
+      return;
+    }
+    var sorted = filtered.slice().sort(function (a, b) {
+      if (phraseSortMode === "az") {
+        return (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase());
+      }
+      return b.createdAt - a.createdAt;
+    });
     list.innerHTML = sorted.map(function (p) {
       var thumb = p.front ? '<img src="' + p.front + '" alt="">' : "";
       var n = (p.motifs || []).length;
