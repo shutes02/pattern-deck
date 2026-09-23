@@ -44,28 +44,14 @@
     }
   }
   :root[data-theme="dark"] {
-    --paper: #1c1a15;
-    --paper-2: #242018;
-    --surface: #2a261e;
-    --ink: #ece6d8;
-    --ink-soft: #a89c81;
-    --line: #45402f;
-    --line-strong: #5c5540;
-    --accent: #8fa3d1;
-    --accent-soft: #8fa3d11f;
-    --olive: #a3b37c;
-    --olive-soft: #a3b37c1f;
-    --danger: #d98f7e;
-    --shadow: rgba(0, 0, 0, 0.35);
-    color-scheme: dark;
+    --paper: #1c1a15; --paper-2: #242018; --surface: #2a261e; --ink: #ece6d8;
+    --ink-soft: #a89c81; --line: #45402f; --line-strong: #5c5540; --accent: #8fa3d1;
+    --accent-soft: #8fa3d11f; --olive: #a3b37c; --olive-soft: #a3b37c1f;
+    --danger: #d98f7e; --shadow: rgba(0, 0, 0, 0.35); color-scheme: dark;
   }
   * { box-sizing: border-box; }
-  html {
-    scroll-padding-top: env(safe-area-inset-top, 0px);
-  }
-  html, body {
-    height: 100%;
-  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { height: 100%; }
   body {
     margin: 0;
     background: var(--paper);
@@ -75,682 +61,187 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
     -webkit-font-smoothing: antialiased;
   }
-  .mono {
-    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  }
-  .wrap {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 18px 40px;
-  }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace; }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 18px 50px; }
   header.top {
-    position: sticky;
-    top: env(safe-area-inset-top, 0px);
-    z-index: 5;
-    background: var(--paper);
-    padding: 18px 18px 10px;
-    max-width: 480px;
-    margin: 0 auto;
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: var(--paper); padding: 18px 18px 10px; max-width: 480px; margin: 0 auto;
   }
-  .title-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  h1 {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    margin: 0;
-  }
-  .count {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
-  nav.tabs {
-    display: flex;
-    gap: 4px;
-    margin-top: 14px;
-    border-bottom: 1px solid var(--line);
-  }
+  .title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  h1 { font-size: 22px; font-weight: 600; letter-spacing: 0.2px; margin: 0; }
+  .count { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); text-align: right; }
+  nav.tabs { display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid var(--line); }
   nav.tabs button {
-    appearance: none;
-    background: none;
-    border: none;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12.5px;
-    letter-spacing: 0.3px;
-    color: var(--ink-soft);
-    padding: 8px 4px 10px;
-    margin-right: 18px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transform: translateY(1px);
+    appearance: none; background: none; border: none; font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px; letter-spacing: 0.3px; color: var(--ink-soft); padding: 8px 4px 10px;
+    margin-right: 18px; cursor: pointer; border-bottom: 2px solid transparent; transform: translateY(1px);
   }
-  nav.tabs button.active {
-    color: var(--ink);
-    border-bottom-color: var(--accent);
-  }
+  nav.tabs button.active { color: var(--ink); border-bottom-color: var(--accent); }
   main { padding-top: 18px; }
   section { display: none; }
   section.active { display: block; }
 
-  /* ---- Practice / shuffle ---- */
-  .deck-area {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 6px;
-  }
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--ink-soft);
-  }
+  .empty { text-align: center; padding: 60px 20px; color: var(--ink-soft); }
   .empty .big { font-size: 15px; color: var(--ink); margin-bottom: 6px; }
   .empty .small { font-family: "IBM Plex Mono", monospace; font-size: 12px; }
 
-  .card-stack {
-    position: relative;
-    width: 100%;
-    max-width: 340px;
-    aspect-ratio: 148 / 105;
-    margin: 6px auto 18px;
+  /* ---- shared: fields / uploads (Add Phrase form) ---- */
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    letter-spacing: 0.3px; color: var(--ink-soft); margin-bottom: 6px;
   }
-  .stack-deco {
-    position: absolute;
-    inset: 0;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    border-radius: 3px;
+  .field input[type="text"] {
+    width: 100%; font-family: "Source Serif 4", Georgia, serif; font-size: 16px; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: 3px; padding: 10px 12px;
   }
-  .stack-deco.d1 { transform: translateY(10px) scale(0.97); opacity: 0.6; }
-  .stack-deco.d2 { transform: translateY(18px) scale(0.94); opacity: 0.35; }
-
-  .flip-card {
-    position: absolute;
-    inset: 0;
-    cursor: pointer;
-    perspective: 1200px;
+  .add-back-link {
+    display: block; margin: 10px auto 0; font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+    color: var(--ink-soft); background: none; border: none; text-decoration: underline;
+    text-underline-offset: 3px; cursor: pointer; padding: 4px;
   }
-  .flip-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.5s cubic-bezier(.2,.7,.3,1);
-    transform-style: preserve-3d;
-    box-shadow: 0 10px 24px var(--shadow);
-    border-radius: 3px;
+  .upload-box {
+    aspect-ratio: 148/105; border: 1.5px dashed var(--line-strong); border-radius: 3px;
+    display: flex; align-items: center; justify-content: center; position: relative;
+    overflow: hidden; background: var(--surface); cursor: pointer;
   }
-  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
-  .face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: 3px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .face img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .face .placeholder {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--ink-soft);
-  }
-  .face.back { transform: rotateY(180deg); }
-  .face-tag {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9.5px;
-    letter-spacing: 0.5px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 2px;
-    padding: 2px 6px;
-    color: var(--ink-soft);
-  }
-  .expand-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 12px;
-    line-height: 1;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 2px;
-    padding: 3px 6px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    z-index: 2;
-  }
-  .face-static { cursor: zoom-in; }
-
-  .meta-block {
-    width: 100%;
-    max-width: 340px;
-    margin: 0 auto;
-  }
-  .meta-name {
-    font-size: 18px;
-    font-weight: 600;
-  }
-  .meta-from {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12px;
-    color: var(--ink-soft);
-    margin-top: 3px;
-  }
-  .chips {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-  }
-  .chip {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    padding: 7px 11px;
-    border: 1px solid var(--line-strong);
-    border-radius: 20px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    user-select: none;
-    background: var(--surface);
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-  }
-  .chip.on {
-    color: var(--olive);
-    border-color: var(--olive);
-    background: var(--olive-soft);
-  }
-
-  .practice-controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 24px;
-  }
+  .upload-box img { width: 100%; height: 100%; object-fit: cover; }
+  .upload-box .plus { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); text-align: center; line-height: 1.5; }
+  .upload-box input { display: none; }
+  .upload-label { font-family: "IBM Plex Mono", monospace; font-size: 10px; text-align: center; color: var(--ink-soft); margin-top: 6px; }
+  .upload-cols { display: flex; gap: 10px; }
+  .upload-col { flex: 1; }
+  .save-row { margin-top: 26px; }
+  .save-row button.primary { width: 100%; padding: 13px; }
   button.primary {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12.5px;
-    letter-spacing: 0.3px;
-    background: var(--accent);
-    color: var(--paper);
-    border: none;
-    padding: 12px 22px;
-    border-radius: 3px;
-    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.3px;
+    background: var(--accent); color: var(--paper); border: none; padding: 12px 22px;
+    border-radius: 3px; cursor: pointer;
   }
   button.ghost {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12.5px;
-    background: none;
-    border: 1px solid var(--line-strong);
-    color: var(--ink);
-    padding: 12px 18px;
-    border-radius: 3px;
-    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; background: none;
+    border: 1px solid var(--line-strong); color: var(--ink); padding: 12px 18px; border-radius: 3px; cursor: pointer;
   }
-  .pull-size {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 22px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--ink-soft);
-  }
-  .pull-size button {
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--ink-soft);
-    padding: 5px 10px;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  .pull-size button.active {
-    color: var(--ink);
-    border-color: var(--accent);
-  }
-  .second-card { margin-top: 30px; }
 
-  /* ---- All cards ---- */
-  .list-row {
-    display: flex;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
-    align-items: center;
-  }
-  .thumb {
-    width: 68px;
-    height: 48px;
-    flex-shrink: 0;
-    border: 1px solid var(--line-strong);
-    border-radius: 2px;
-    overflow: hidden;
-    background: var(--surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  /* ---- phrase list ---- */
+  .list-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; align-items: center; }
+  .thumb { width: 60px; height: 42px; flex-shrink: 0; border: 1px solid var(--line-strong); border-radius: 2px; overflow: hidden; background: var(--surface); display: flex; align-items: center; justify-content: center; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; }
   .row-main { flex: 1; min-width: 0; }
   .row-name { font-size: 15.5px; font-weight: 600; }
-  .row-from {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--ink-soft);
-    margin-top: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .row-tags {
-    display: flex;
-    gap: 5px;
-    margin-top: 5px;
-  }
-  .tag-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--line-strong);
-  }
-  .tag-dot.on { background: var(--olive); }
+  .row-from { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-count { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--accent); margin-top: 3px; }
 
-  /* ---- Add form ---- */
-  .add-back-link {
-    display: block;
-    margin: 10px auto 0;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    color: var(--ink-soft);
-    background: none;
-    border: none;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-    padding: 4px;
-  }
-  .landings-block {
-    margin-top: 22px;
-    border-top: 1px solid var(--line);
-    padding-top: 16px;
-  }
-  .landings-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-  }
-  .landings-title {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    color: var(--ink-soft);
-  }
-  .landings-count {
-    font-size: 13px;
-    color: var(--ink);
-  }
-  .landing-add-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .landing-add-row input {
-    flex: 1;
-    font-size: 13.5px;
-    color: var(--ink);
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: 3px;
-    padding: 9px 10px;
-  }
-  .landing-add-row button {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    background: var(--accent);
-    color: var(--paper);
-    border: none;
-    border-radius: 3px;
-    padding: 0 16px;
-    cursor: pointer;
-  }
-  .lview, .lattach {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    color: var(--accent);
-    background: none;
-    border: none;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 7px;
-  }
-  .landing-item {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 14px;
-  }
-  .landing-item .ldate {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    color: var(--ink-soft);
-    margin-left: 8px;
-    white-space: nowrap;
-  }
-  .ltally {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--ink-soft);
-    margin-left: 8px;
-    white-space: nowrap;
-  }
-  .ltallyplus, .p-tallyplus,
-  .ltallyminus, .p-tallyminus {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    color: var(--olive);
-    background: var(--olive-soft);
-    border: 1px solid var(--olive);
-    border-radius: 10px;
-    cursor: pointer;
-    padding: 1px 7px;
-    margin-left: 6px;
-  }
-  .ltallyminus, .p-tallyminus {
-    color: var(--ink-soft);
-    background: none;
-    border-color: var(--line-strong);
-    margin-left: 3px;
-  }
-  .landing-item .lremove {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--ink-soft);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 0 0 10px;
-  }
-  .landings-empty {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    color: var(--ink-soft);
-    padding: 6px 0;
-  }
-  .landing-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 12px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .landing-toggle .mono {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    color: var(--ink-soft);
-  }
-  .landing-toggle .chev {
-    font-size: 9px;
-    color: var(--ink-soft);
-    transition: transform 0.2s;
-    display: inline-block;
-  }
-  .landing-toggle.open .chev { transform: rotate(180deg); }
-  .landing-panel {
-    margin-top: 12px;
-    border-top: 1px solid var(--line);
-    padding-top: 12px;
-    text-align: left;
-  }
-  .p-landings-list .landing-item-ro {
-    padding: 7px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 13.5px;
-  }
-  .p-landings-list .lrow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px;
-  }
-  .p-landings-list .lrow > span:first-child { flex: 1; }
-  .p-landings-list .p-lremove {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    color: var(--ink-soft);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 0 0 8px;
-  }
-  .p-landings-list .ldate {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    color: var(--ink-soft);
-    white-space: nowrap;
-  }
-  .attach-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 4px;
-  }
-  .attach-row .p-attach,
-  .attach-row .p-removefile {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    color: var(--accent);
-    background: none;
-    border: none;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    cursor: pointer;
-    padding: 0;
-  }
-  .attach-row .p-removefile { color: var(--ink-soft); }
-  .p-landings-list .attach-toggle {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px;
-    color: var(--accent);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px 0 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .p-landings-list .attach-toggle .chev {
-    font-size: 8px;
-    transition: transform 0.2s;
-  }
-  .p-landings-list .attach-toggle.open .chev {
-    transform: rotate(180deg);
-  }
-  .attached-files-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 6px;
-  }
-  .file-line {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--accent);
-    background: none;
-    border: none;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    cursor: pointer;
-    padding: 0;
-    text-align: left;
-    align-self: flex-start;
-  }
-  .p-landing-add-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  .p-landing-add-row input {
-    flex: 1;
-    font-size: 13.5px;
-    color: var(--ink);
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: 3px;
-    padding: 8px 10px;
-  }
-  .p-landing-add-row button {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    background: var(--accent);
-    color: var(--paper);
-    border: none;
-    border-radius: 3px;
-    padding: 0 14px;
-    cursor: pointer;
-  }
-  .field { margin-bottom: 18px; }
-  .field label {
-    display: block;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-  .field input[type="text"] {
-    width: 100%;
-    font-family: "Source Serif 4", Georgia, serif;
-    font-size: 16px;
-    color: var(--ink);
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: 3px;
-    padding: 10px 12px;
-  }
-  .upload-pair {
-    display: flex;
-    gap: 10px;
-  }
-  .upload-box {
-    flex: 1;
-    aspect-ratio: 148 / 105;
-    border: 1.5px dashed var(--line-strong);
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    background: var(--surface);
-    cursor: pointer;
-  }
-  .upload-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .upload-box .plus {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--ink-soft);
-    text-align: center;
-    line-height: 1.5;
-  }
-  .upload-box input { display: none; }
-  .upload-label {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    text-align: center;
-    color: var(--ink-soft);
-    margin-top: 6px;
-  }
-  .upload-cols { display: flex; gap: 10px; }
-  .upload-col { flex: 1; }
-
-  .save-row { margin-top: 26px; }
-  .save-row button.primary { width: 100%; padding: 13px; }
-
-  /* ---- Detail ---- */
+  /* ---- phrase detail ---- */
   .detail-back {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    color: var(--ink-soft);
-    background: none;
-    border: none;
-    padding: 0 0 14px;
-    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-soft);
+    background: none; border: none; padding: 0 0 14px; cursor: pointer;
   }
   .detail-imgs { display: flex; gap: 10px; margin-bottom: 16px; }
-  .detail-imgs .face-static {
-    flex: 1;
-    aspect-ratio: 148/105;
-    border: 1px solid var(--line-strong);
-    border-radius: 3px;
-    overflow: hidden;
-    background: var(--surface);
+  .face-static {
+    flex: 1; aspect-ratio: 148/105; border: 1px solid var(--line-strong); border-radius: 3px;
+    overflow: hidden; background: var(--surface); cursor: zoom-in;
   }
-  .detail-imgs img { width: 100%; height: 100%; object-fit: cover; display:block; }
+  .face-static img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .meta-name { font-size: 19px; font-weight: 600; }
+  .meta-from { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+  .section-head { display: flex; justify-content: space-between; align-items: baseline; margin: 24px 0 12px; }
+  .section-head .st { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.4px; color: var(--ink-soft); text-transform: uppercase; }
+  .quick-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .quick-add-row input { flex: 1; font-size: 13.5px; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 3px; padding: 9px 10px; }
+  .quick-add-row button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; background: var(--accent); color: var(--paper);
+    border: none; border-radius: 3px; padding: 0 16px; cursor: pointer;
+  }
   .danger-row { margin-top: 30px; text-align: center; }
   .danger-link {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    color: var(--danger);
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--danger); background: none;
+    border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
   }
+
+  /* ---- motif accordion (used in Phrase detail AND Practice) ---- */
+  .motif-block { border: 1px solid var(--line); border-radius: 4px; margin-bottom: 12px; overflow: hidden; background: var(--surface); }
+  .motif-head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; cursor: pointer; user-select: none; }
+  .motif-head .mname { font-size: 15px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .motif-head .mcount { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-soft); white-space: nowrap; }
+  .motif-head .chev { font-size: 10px; color: var(--ink-soft); transition: transform 0.2s; }
+  .motif-head.open .chev { transform: rotate(180deg); }
+  .motif-panel { display: none; padding: 0 14px 16px; border-top: 1px solid var(--line); }
+  .motif-panel.open { display: block; }
+
+  .provenance { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-soft); text-align: center; margin-bottom: 8px; }
+
+  .motif-image-box {
+    width: 100%; max-height: 260px; min-height: 90px; border: 1px solid var(--line-strong); border-radius: 3px;
+    background: var(--paper-2); display: flex; align-items: center; justify-content: center; overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .motif-image-box[data-role="motif-image"] { cursor: zoom-in; }
+  .motif-image-box img { max-width: 100%; max-height: 260px; object-fit: contain; display: block; }
+  .motif-image-box .placeholder { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); text-align: center; padding: 20px; }
+
+  .attach-row { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
+  .attach-row .link-btn, .attach-toggle {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--accent); background: none;
+    border: none; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; padding: 0;
+    display: inline-flex; align-items: center; gap: 3px;
+  }
+  .attach-row .link-btn.muted { color: var(--ink-soft); }
+  .attach-toggle .chev { font-size: 8px; transition: transform 0.2s; }
+  .attach-toggle.open .chev { transform: rotate(180deg); }
+  .attached-files-list { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  .file-line {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); background: none;
+    border: none; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; padding: 0; text-align: left; align-self: flex-start;
+  }
+
+  .chips { display: flex; gap: 8px; margin: 14px 0; flex-wrap: wrap; }
+  .chip {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 7px 11px; border: 1px solid var(--line-strong);
+    border-radius: 20px; color: var(--ink-soft); cursor: pointer; user-select: none; background: var(--surface);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .chip.on { color: var(--olive); border-color: var(--olive); background: var(--olive-soft); }
+
+  .landings-block { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 14px; }
+  .landings-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .landings-title { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.3px; color: var(--ink-soft); }
+  .landings-count { font-size: 13px; color: var(--ink); }
+  .landing-add-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .landing-add-row input { flex: 1; font-size: 13.5px; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 3px; padding: 9px 10px; }
+  .landing-add-row button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; background: var(--accent); color: var(--paper);
+    border: none; border-radius: 3px; padding: 0 16px; cursor: pointer;
+  }
+  .landing-item { padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .landing-item .lrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+  .landing-item .lrow > .ltext { flex: 1; min-width: 100px; }
+  .landing-item .ldate { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--ink-soft); white-space: nowrap; }
+  .ltally { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+  .tallybtn {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--olive); background: var(--olive-soft);
+    border: 1px solid var(--olive); border-radius: 10px; cursor: pointer; padding: 1px 7px;
+  }
+  .tallybtn.minus { color: var(--ink-soft); background: none; border-color: var(--line-strong); }
+  .lremove {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-soft); background: none;
+    border: none; cursor: pointer; padding: 0;
+  }
+  .landings-empty { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-soft); padding: 6px 0; }
+
+  .practice-controls { display: flex; justify-content: center; gap: 10px; margin-top: 22px; }
+  .pull-size { display: flex; justify-content: center; gap: 8px; margin-top: 18px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); }
+  .pull-size button { background: none; border: 1px solid var(--line); color: var(--ink-soft); padding: 5px 10px; border-radius: 20px; cursor: pointer; }
+  .pull-size button.active { color: var(--ink); border-color: var(--accent); }
+  .second-card { margin-top: 30px; }
 
   .toast {
-    position: fixed;
-    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    background: var(--ink);
-    color: var(--paper);
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12px;
-    padding: 10px 16px;
-    border-radius: 4px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s, transform 0.25s;
-    z-index: 20;
+    position: fixed; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); left: 50%;
+    transform: translateX(-50%) translateY(10px); background: var(--ink); color: var(--paper);
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; padding: 10px 16px; border-radius: 4px;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 20;
   }
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   ::selection { background: var(--accent-soft); }
 </style>
 </head>
@@ -759,12 +250,12 @@
 <header class="top">
   <div class="title-row">
     <h1>Pattern Deck</h1>
-    <span class="count mono" id="deckCount">0 cards</span>
+    <span class="count mono" id="deckCount">0 phrases</span>
   </div>
   <nav class="tabs">
     <button data-tab="practice" class="active">practice</button>
-    <button data-tab="all">all cards</button>
-    <button data-tab="add">add</button>
+    <button data-tab="phrases">phrases</button>
+    <button data-tab="add">add phrase</button>
   </nav>
 </header>
 
@@ -775,18 +266,18 @@
     <div class="deck-area" id="practiceArea"></div>
   </section>
 
-  <!-- ALL CARDS -->
-  <section id="all">
-    <div id="allList"></div>
+  <!-- PHRASES LIST -->
+  <section id="phrases">
+    <div id="phraseListArea"></div>
   </section>
 
-  <!-- ADD -->
+  <!-- ADD PHRASE -->
   <section id="add">
     <div class="field">
-      <label>card scan</label>
+      <label>phrase scan</label>
       <div class="upload-box" id="frontBox">
         <img id="frontPreviewImg" alt="front preview" style="display:none;">
-        <span class="plus" id="frontPlus">+<br>upload front<br>(PDF or photo)</span>
+        <span class="plus" id="frontPlus">+<br>upload scan<br>(PDF or photo)</span>
         <input type="file" id="frontInput" accept="application/pdf,.pdf,image/*">
       </div>
       <button type="button" class="add-back-link" id="addBackLink">+ add a back scan (optional)</button>
@@ -799,53 +290,56 @@
       </div>
     </div>
     <div class="field">
-      <label>pattern name / shorthand</label>
-      <input type="text" id="nameInput" placeholder="e.g. 3-to-9 enclosure">
-    </div>
-    <div class="field">
-      <label>from</label>
-      <input type="text" id="fromInput" placeholder="tune + spot">
+      <label>phrase name</label>
+      <input type="text" id="nameInput" placeholder="e.g. Autumn Leaves, bar 5 turnaround">
     </div>
     <div class="save-row">
-      <button class="primary" id="saveBtn">Save card</button>
+      <button class="primary" id="saveBtn">Save phrase</button>
     </div>
   </section>
 
-  <!-- DETAIL (overlays "all" tab content when a card is opened) -->
-  <section id="detail">
-    <button class="detail-back" id="detailBack">&larr; all cards</button>
-    <div class="detail-imgs">
+  <!-- PHRASE DETAIL -->
+  <section id="phraseDetail">
+    <button class="detail-back" id="detailBack">&larr; phrases</button>
+    <div class="detail-imgs" id="phraseImgsWrap" style="display:none;">
       <div class="face-static"><img id="detailFront" alt="front"></div>
       <div class="face-static" id="detailBackWrap"><img id="detailBack2" alt="back"></div>
     </div>
     <div class="meta-name" id="detailName"></div>
     <div class="meta-from mono" id="detailFrom"></div>
-    <div class="chips" style="margin-top:16px;">
-      <div class="chip" id="detailChip1">12 keys clean</div>
-      <div class="chip" id="detailChip2">showed up unprompted</div>
-    </div>
 
-    <div class="landings-block">
-      <div class="landings-head">
-        <span class="landings-title">landed in</span>
-        <span class="landings-count mono" id="landingsCount">0</span>
-      </div>
-      <div class="landing-add-row">
-        <input type="text" id="landingInput" placeholder="tune + spot" class="mono">
-        <button type="button" id="landingAddBtn">add</button>
-      </div>
-      <div id="landingsList"></div>
-      <input type="file" id="landingFileInput" accept="application/pdf,.pdf,image/*" style="display:none;">
+    <div class="section-head">
+      <span class="st">motifs</span>
     </div>
+    <div class="quick-add-row" id="motifQuickAddRow">
+      <button type="button" id="motifUploadBtn" class="primary" style="width:100%;">+ add motif (upload scan)</button>
+    </div>
+    <div id="motifPendingWrap" style="display:none; margin-bottom:16px;">
+      <div class="attach-row" style="margin-bottom:8px;"><span class="mono" id="motifPendingLabel"></span></div>
+      <input type="text" id="motifNameInput" placeholder="name this motif">
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button type="button" id="motifSaveBtn" class="primary" style="flex:1;">save motif</button>
+        <button type="button" id="motifCancelBtn" class="ghost">cancel</button>
+      </div>
+    </div>
+    <button type="button" class="add-back-link" id="motifNoFileLink">or add a motif without a scan yet</button>
+    <div id="motifNoFileWrap" style="display:none; margin-top:10px;">
+      <div class="quick-add-row">
+        <input type="text" id="motifNoFileNameInput" placeholder="motif name (optional)">
+        <button type="button" id="motifNoFileAddBtn">add</button>
+      </div>
+    </div>
+    <div id="motifsList"></div>
 
     <div class="danger-row">
-      <button class="danger-link" id="deleteBtn">delete this card</button>
+      <button class="danger-link" id="deletePhraseBtn">delete this phrase</button>
     </div>
   </section>
 
 </main>
 
 <div class="toast" id="toast"></div>
+<input type="file" id="sharedFileInput" accept="application/pdf,.pdf,image/*" style="display:none;">
 
 <script>
 (function () {
@@ -858,7 +352,7 @@
 
   // ---------- IndexedDB ----------
   var DB_NAME = "pattern_deck_db";
-  var STORE = "cards";
+  var STORE = "cards"; // kept as-is so existing data (pre-restructure) is found & migrated
   var db = null;
 
   function openDB() {
@@ -866,61 +360,74 @@
       var req = indexedDB.open(DB_NAME, 1);
       req.onupgradeneeded = function (e) {
         var d = e.target.result;
-        if (!d.objectStoreNames.contains(STORE)) {
-          d.createObjectStore(STORE, { keyPath: "id" });
-        }
+        if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, { keyPath: "id" });
       };
       req.onsuccess = function (e) { resolve(e.target.result); };
       req.onerror = function (e) { reject(e); };
     });
   }
-
-  function txStore(mode) {
-    var tx = db.transaction(STORE, mode);
-    return tx.objectStore(STORE);
-  }
-
+  function txStore(mode) { return db.transaction(STORE, mode).objectStore(STORE); }
   function dbGetAll() {
     return new Promise(function (resolve, reject) {
       try {
-        var store = txStore("readonly");
-        var req = store.getAll();
+        var req = txStore("readonly").getAll();
         req.onsuccess = function () { resolve(req.result || []); };
         req.onerror = function () { reject(req.error); };
       } catch (err) { reject(err); }
     });
   }
-
-  function dbPut(card) {
+  function dbPut(obj) {
     return new Promise(function (resolve, reject) {
       try {
-        var store = txStore("readwrite");
-        var req = store.put(card);
+        var req = txStore("readwrite").put(obj);
         req.onsuccess = function () { resolve(); };
         req.onerror = function () { reject(req.error); };
       } catch (err) { reject(err); }
     });
   }
-
   function dbDelete(id) {
     return new Promise(function (resolve, reject) {
       try {
-        var store = txStore("readwrite");
-        var req = store.delete(id);
+        var req = txStore("readwrite").delete(id);
         req.onsuccess = function () { resolve(); };
         req.onerror = function () { reject(req.error); };
       } catch (err) { reject(err); }
     });
   }
 
+  // ---------- migration: old flat "card" docs -> Phrase{motifs:[...]} ----------
+  function migrateToPhrase(item) {
+    if (item.motifs) return item;
+    var legacyLandings = item.landings || [];
+    var motif = {
+      id: "motif_" + item.id,
+      name: item.name || "motif 1",
+      images: item.front ? [item.front] : (item.back ? [item.back] : []),
+      fileName: null,
+      keysClean: !!item.keysClean,
+      unprompted: !!item.unprompted,
+      landings: legacyLandings,
+      createdAt: item.createdAt || Date.now()
+    };
+    return {
+      id: item.id,
+      name: item.name || "",
+      from: item.from || "",
+      front: item.front || null,
+      back: item.back || null,
+      createdAt: item.createdAt || Date.now(),
+      motifs: [motif]
+    };
+  }
+
   // ---------- state ----------
-  var cards = [];
+  var phrases = [];
   var pullSize = 1;
-  var currentPull = [];
+  var currentPull = []; // array of {phraseId, motifId}
   var pendingFront = null, pendingBack = null;
   var activeTab = "practice";
-  var detailCardId = null;
-  var cameFromTab = "all";
+  var currentPhraseId = null;
+  var pendingAttachResolve = null;
 
   function toast(msg) {
     var t = document.getElementById("toast");
@@ -929,7 +436,22 @@
     setTimeout(function () { t.classList.remove("show"); }, 1600);
   }
 
-  // ---------- image compression ----------
+  function findPhrase(id) { return phrases.find(function (p) { return p.id === id; }); }
+  function findMotif(phrase, id) { return (phrase && phrase.motifs || []).find(function (m) { return m.id === id; }); }
+  function findLanding(motif, at) { return (motif && motif.landings || []).find(function (l) { return l.at === at; }); }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+  function formatShortDate(ts) {
+    var d = new Date(ts);
+    return (d.getMonth() + 1) + "/" + d.getDate() + "/" + String(d.getFullYear()).slice(2);
+  }
+  function landingTally(l) { return (l && l.count) || 1; }
+
+  // ---------- image helpers ----------
   function fileToCompressedDataURL(file) {
     return new Promise(function (resolve, reject) {
       var reader = new FileReader();
@@ -939,13 +461,11 @@
         img.onerror = function () { reject(new Error("bad image")); };
         img.onload = function () {
           var maxDim = 1000;
-          var w = img.width, h = img.height;
-          var scale = Math.min(1, maxDim / Math.max(w, h));
-          var cw = Math.round(w * scale), ch = Math.round(h * scale);
+          var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+          var cw = Math.round(img.width * scale), ch = Math.round(img.height * scale);
           var canvas = document.createElement("canvas");
           canvas.width = cw; canvas.height = ch;
-          var ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, cw, ch);
+          canvas.getContext("2d").drawImage(img, 0, 0, cw, ch);
           resolve(canvas.toDataURL("image/jpeg", 0.82));
         };
         img.src = reader.result;
@@ -953,811 +473,35 @@
       reader.readAsDataURL(file);
     });
   }
-
   function downscaleCanvasToDataUrl(canvas, maxDim) {
-    var w = canvas.width, h = canvas.height;
-    var scale = Math.min(1, maxDim / Math.max(w, h));
+    var scale = Math.min(1, maxDim / Math.max(canvas.width, canvas.height));
     if (scale >= 1) return canvas.toDataURL("image/jpeg", 0.85);
-    var cw = Math.round(w * scale), ch = Math.round(h * scale);
+    var cw = Math.round(canvas.width * scale), ch = Math.round(canvas.height * scale);
     var c2 = document.createElement("canvas");
     c2.width = cw; c2.height = ch;
-    var ctx2 = c2.getContext("2d");
-    ctx2.drawImage(canvas, 0, 0, cw, ch);
+    c2.getContext("2d").drawImage(canvas, 0, 0, cw, ch);
     return c2.toDataURL("image/jpeg", 0.85);
   }
-
   function renderPdfPageToDataUrl(pdf, pageNum) {
     return pdf.getPage(pageNum).then(function (page) {
       var viewport = page.getViewport({ scale: 2 });
       var canvas = document.createElement("canvas");
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
+      canvas.width = viewport.width; canvas.height = viewport.height;
       var ctx = canvas.getContext("2d");
       return page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function () {
         return downscaleCanvasToDataUrl(canvas, 1000);
       });
     });
   }
-
   var MAX_ATTACH_PAGES = 20;
-
   function renderAllPdfPagesToDataUrls(pdf) {
     var n = Math.min(pdf.numPages, MAX_ATTACH_PAGES);
     var tasks = [];
     for (var p = 1; p <= n; p++) tasks.push(renderPdfPageToDataUrl(pdf, p));
     return Promise.all(tasks);
   }
+  function isPdfFile(file) { return file.type === "application/pdf" || /\.pdf$/i.test(file.name || ""); }
 
-  function landingImages(l) {
-    if (!l) return [];
-    if (l.images && l.images.length) return l.images;
-    if (l.image) return [l.image];
-    return [];
-  }
-
-  function landingTally(l) {
-    return (l && l.count) || 1;
-  }
-
-  function formatShortDate(ts) {
-    var d = new Date(ts);
-    return (d.getMonth() + 1) + "/" + d.getDate() + "/" + String(d.getFullYear()).slice(2);
-  }
-
-  // ---------- tabs ----------
-  var tabButtons = document.querySelectorAll("nav.tabs button");
-  tabButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      switchTab(btn.getAttribute("data-tab"));
-    });
-  });
-
-  function switchTab(tab) {
-    activeTab = tab;
-    document.querySelectorAll("main > section").forEach(function (s) {
-      s.classList.remove("active");
-    });
-    document.getElementById(tab).classList.add("active");
-    tabButtons.forEach(function (b) {
-      b.classList.toggle("active", b.getAttribute("data-tab") === tab);
-    });
-    if (tab === "practice") renderPractice();
-    if (tab === "all") renderAllList();
-  }
-
-  // ---------- render: header count ----------
-  function renderCount() {
-    document.getElementById("deckCount").textContent =
-      cards.length + (cards.length === 1 ? " card" : " cards");
-  }
-
-  // ---------- practice ----------
-  function pickRandom(n) {
-    var pool = cards.slice();
-    var picked = [];
-    n = Math.min(n, pool.length);
-    for (var i = 0; i < n; i++) {
-      var idx = Math.floor(Math.random() * pool.length);
-      picked.push(pool[idx]);
-      pool.splice(idx, 1);
-    }
-    return picked;
-  }
-
-  function newPull() {
-    currentPull = pickRandom(pullSize);
-    renderPractice();
-  }
-
-  function renderPractice() {
-    var area = document.getElementById("practiceArea");
-    area.innerHTML = "";
-
-    if (cards.length === 0) {
-      area.innerHTML =
-        '<div class="empty">' +
-        '<div class="big">No cards yet</div>' +
-        '<div class="small mono">add a card to start pulling from the deck</div>' +
-        "</div>";
-      return;
-    }
-
-    if (currentPull.length === 0) currentPull = pickRandom(pullSize);
-
-    currentPull.forEach(function (card, i) {
-      var block = document.createElement("div");
-      block.className = "card-block";
-      if (i > 0) block.style.marginTop = "30px";
-      block.innerHTML = renderCardBlock(card);
-      area.appendChild(block);
-      wireCardBlock(block, card);
-    });
-
-    var controls = document.createElement("div");
-    controls.innerHTML =
-      '<div class="practice-controls">' +
-      '<button class="primary" id="newPullBtn">Shuffle new pull</button>' +
-      "</div>" +
-      '<div class="pull-size">' +
-      '<span>pull&nbsp;</span>' +
-      '<button data-n="1" class="' + (pullSize === 1 ? "active" : "") + '">1</button>' +
-      '<button data-n="2" class="' + (pullSize === 2 ? "active" : "") + '">2</button>' +
-      "</div>";
-    area.appendChild(controls);
-
-    document.getElementById("newPullBtn").addEventListener("click", newPull);
-    controls.querySelectorAll(".pull-size button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        pullSize = parseInt(b.getAttribute("data-n"), 10);
-        currentPull = [];
-        renderPractice();
-      });
-    });
-  }
-
-  function renderCardBlock(card) {
-    var frontImg = card.front
-      ? '<img src="' + card.front + '" alt="front">'
-      : '<span class="placeholder">no front photo</span>';
-    var backImg = card.back
-      ? '<img src="' + card.back + '" alt="back">'
-      : '<span class="placeholder">no back photo</span>';
-    var landingCount = (card.landings || []).length;
-
-    return (
-      '<div class="card-stack">' +
-      '<div class="stack-deco d2"></div>' +
-      '<div class="stack-deco d1"></div>' +
-      '<div class="flip-card" data-id="' + card.id + '">' +
-      '<div class="flip-inner">' +
-      '<div class="face front">' + frontImg + '<span class="face-tag">front</span>' +
-      (card.front ? '<button type="button" class="expand-btn" data-side="front">&#10530;</button>' : '') +
-      '</div>' +
-      '<div class="face back">' + backImg + '<span class="face-tag">back</span>' +
-      (card.back ? '<button type="button" class="expand-btn" data-side="back">&#10530;</button>' : '') +
-      '</div>' +
-      "</div></div></div>" +
-      '<div class="meta-block">' +
-      '<div class="meta-name">' + escapeHtml(card.name || "untitled pattern") + '</div>' +
-      '<div class="meta-from">' + escapeHtml(card.from || "") + '</div>' +
-      '<div class="chips">' +
-      '<div class="chip keys ' + (card.keysClean ? "on" : "") + '">12 keys clean</div>' +
-      '<div class="chip unprompted ' + (card.unprompted ? "on" : "") + '">showed up unprompted</div>' +
-      "</div>" +
-      '<div class="landing-toggle" data-id="' + card.id + '">' +
-      '<span class="mono">landed in ' + landingCount + (landingCount === 1 ? " tune" : " tunes") + '</span>' +
-      '<span class="chev">&#9662;</span>' +
-      "</div>" +
-      '<div class="landing-panel" style="display:none;"></div>' +
-      "</div>"
-    );
-  }
-
-  function buildPracticeLandingsHTML(card) {
-    var landings = card.landings || [];
-    var sorted = landings.slice().sort(function (a, b) { return b.at - a.at; });
-    var itemsHtml = sorted.length
-      ? sorted.map(function (l) {
-          var imgs = landingImages(l);
-          var dateStr = formatShortDate(l.at);
-          var attachToggle = "";
-          var stripHtml = "";
-          var fileAction = "";
-          if (imgs.length) {
-            attachToggle = '<button type="button" class="attach-toggle" data-at="' + l.at + '">' +
-              (imgs.length > 1 ? imgs.length + " pages" : "preview") +
-              ' <span class="chev">&#9662;</span></button>';
-            fileAction = '<button type="button" class="p-removefile" data-at="' + l.at + '">remove file</button>';
-            stripHtml = '<div class="attached-files-list" data-at="' + l.at + '" style="display:none;">' +
-              imgs.map(function (u, i) {
-                var label = l.fileName
-                  ? l.fileName + (imgs.length > 1 ? " \u00b7 p" + (i + 1) : "")
-                  : "p" + (i + 1);
-                return (
-                  '<button type="button" class="file-line" data-at="' + l.at + '" data-idx="' + i + '">' +
-                  escapeHtml(label) +
-                  "</button>"
-                );
-              }).join("") + "</div>";
-          } else {
-            fileAction = '<button type="button" class="p-attach" data-at="' + l.at + '">attach file</button>';
-          }
-          var tally = landingTally(l);
-          return (
-            '<div class="landing-item-ro" data-at="' + l.at + '">' +
-            '<div class="lrow"><span>' + escapeHtml(l.text) + '</span>' +
-            '<span class="ldate">' + dateStr + '</span>' +
-            '<span class="ltally mono">&times;' + tally + '</span>' +
-            '<button type="button" class="p-tallyplus" data-at="' + l.at + '" title="log another rep here">+1</button>' +
-            '<button type="button" class="p-tallyminus" data-at="' + l.at + '" title="remove a logged rep">-1</button>' +
-            '<button type="button" class="p-lremove" data-at="' + l.at + '">remove</button>' +
-            "</div>" +
-            '<div class="attach-row">' + attachToggle + fileAction + '</div>' +
-            stripHtml +
-            "</div>"
-          );
-        }).join("")
-      : '<div class="landings-empty">no landings yet</div>';
-
-    return (
-      '<div class="p-landings-list">' + itemsHtml + "</div>" +
-      '<div class="p-landing-add-row">' +
-      '<input type="text" class="p-landing-input mono" placeholder="tune + spot">' +
-      '<button type="button" class="p-landing-add-btn">add</button>' +
-      "</div>"
-    );
-  }
-
-  function wirePracticePanel(panel, toggleCountEl, card) {
-    panel.innerHTML = buildPracticeLandingsHTML(card);
-
-    panel.querySelectorAll(".attach-toggle").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = btn.getAttribute("data-at");
-        var list = panel.querySelector('.attached-files-list[data-at="' + at + '"]');
-        if (!list) return;
-        var isOpen = list.style.display !== "none";
-        list.style.display = isOpen ? "none" : "flex";
-        btn.classList.toggle("open", !isOpen);
-      });
-    });
-    panel.querySelectorAll(".file-line").forEach(function (line) {
-      line.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = parseFloat(line.getAttribute("data-at"));
-        var idx = parseInt(line.getAttribute("data-idx"), 10);
-        var l = (card.landings || []).find(function (l2) { return l2.at === at; });
-        var imgs = landingImages(l);
-        if (imgs[idx]) openImageNewTab(imgs[idx]);
-      });
-    });
-    panel.querySelectorAll(".p-attach").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = parseFloat(btn.getAttribute("data-at"));
-        openAttachPicker(card, at, function () { wirePracticePanel(panel, toggleCountEl, card); });
-      });
-    });
-    panel.querySelectorAll(".p-removefile").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var entry = (card.landings || []).find(function (l) { return l.at === at; });
-        if (!entry) return;
-        entry.images = [];
-        entry.image = null;
-        entry.fileName = null;
-        dbPut(card).then(function () {
-          wirePracticePanel(panel, toggleCountEl, card);
-          toast("file removed");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    panel.querySelectorAll(".p-tallyplus").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var entry = (card.landings || []).find(function (l) { return l.at === at; });
-        if (!entry) return;
-        entry.count = landingTally(entry) + 1;
-        dbPut(card).then(function () {
-          wirePracticePanel(panel, toggleCountEl, card);
-          toast("logged another rep");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    panel.querySelectorAll(".p-tallyminus").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var entry = (card.landings || []).find(function (l) { return l.at === at; });
-        if (!entry) return;
-        entry.count = Math.max(1, landingTally(entry) - 1);
-        dbPut(card).then(function () {
-          wirePracticePanel(panel, toggleCountEl, card);
-          toast("removed a rep");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    panel.querySelectorAll(".p-lremove").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var at = parseFloat(btn.getAttribute("data-at"));
-        card.landings = (card.landings || []).filter(function (l) { return l.at !== at; });
-        dbPut(card).then(function () {
-          var n = card.landings.length;
-          toggleCountEl.textContent = "landed in " + n + (n === 1 ? " tune" : " tunes");
-          wirePracticePanel(panel, toggleCountEl, card);
-          toast("landing removed");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    var addBtn = panel.querySelector(".p-landing-add-btn");
-    var addInput = panel.querySelector(".p-landing-input");
-    function doAdd(e) {
-      e.stopPropagation();
-      var text = addInput.value.trim();
-      if (!text) return;
-      card.landings = card.landings || [];
-      card.landings.push({ text: text, at: Date.now(), images: [], count: 1 });
-      dbPut(card).then(function () {
-        var n = card.landings.length;
-        toggleCountEl.textContent = "landed in " + n + (n === 1 ? " tune" : " tunes");
-        wirePracticePanel(panel, toggleCountEl, card);
-        toast("landing added");
-      }).catch(function () { toast("couldn't save"); });
-    }
-    addBtn.addEventListener("click", doAdd);
-    addInput.addEventListener("click", function (e) { e.stopPropagation(); });
-    addInput.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { e.preventDefault(); doAdd(e); }
-    });
-  }
-
-  function wireCardBlock(block, card) {
-    var flip = block.querySelector(".flip-card");
-    flip.addEventListener("click", function () {
-      flip.classList.toggle("flipped");
-    });
-    block.querySelectorAll(".expand-btn").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var side = btn.getAttribute("data-side");
-        openImageNewTab(side === "front" ? card.front : card.back);
-      });
-    });
-    var chipKeys = block.querySelector(".chip.keys");
-    var chipUnprompted = block.querySelector(".chip.unprompted");
-    chipKeys.addEventListener("click", function (e) {
-      e.stopPropagation();
-      card.keysClean = !card.keysClean;
-      chipKeys.classList.toggle("on", card.keysClean);
-      dbPut(card).catch(function () { toast("couldn't save"); });
-    });
-    chipUnprompted.addEventListener("click", function (e) {
-      e.stopPropagation();
-      card.unprompted = !card.unprompted;
-      chipUnprompted.classList.toggle("on", card.unprompted);
-      dbPut(card).catch(function () { toast("couldn't save"); });
-    });
-
-    var toggle = block.querySelector(".landing-toggle");
-    var panel = block.querySelector(".landing-panel");
-    var toggleCountEl = toggle.querySelector(".mono");
-    var opened = false;
-    toggle.addEventListener("click", function (e) {
-      e.stopPropagation();
-      var isOpen = panel.style.display !== "none";
-      if (isOpen) {
-        panel.style.display = "none";
-        toggle.classList.remove("open");
-      } else {
-        if (!opened) { wirePracticePanel(panel, toggleCountEl, card); opened = true; }
-        panel.style.display = "block";
-        toggle.classList.add("open");
-      }
-    });
-  }
-
-  // ---------- all cards list ----------
-  function renderAllList() {
-    var list = document.getElementById("allList");
-    if (cards.length === 0) {
-      list.innerHTML =
-        '<div class="empty"><div class="big">No cards yet</div>' +
-        '<div class="small mono">add your first pattern card</div></div>';
-      return;
-    }
-    var sorted = cards.slice().sort(function (a, b) { return b.createdAt - a.createdAt; });
-    list.innerHTML = sorted.map(function (card) {
-      var thumb = card.front
-        ? '<img src="' + card.front + '" alt="">'
-        : "";
-      var landingCount = (card.landings || []).length;
-      return (
-        '<div class="list-row" data-id="' + card.id + '">' +
-        '<div class="thumb">' + thumb + "</div>" +
-        '<div class="row-main">' +
-        '<div class="row-name">' + escapeHtml(card.name || "untitled pattern") + "</div>" +
-        '<div class="row-from">' + escapeHtml(card.from || "") +
-        (landingCount ? ' &middot; ' + landingCount + (landingCount === 1 ? ' landing' : ' landings') : '') +
-        "</div>" +
-        '<div class="row-tags">' +
-        '<span class="tag-dot ' + (card.keysClean ? "on" : "") + '"></span>' +
-        '<span class="tag-dot ' + (card.unprompted ? "on" : "") + '"></span>' +
-        "</div></div></div>"
-      );
-    }).join("");
-
-    list.querySelectorAll(".list-row").forEach(function (row) {
-      row.addEventListener("click", function () {
-        openDetail(row.getAttribute("data-id"));
-      });
-    });
-  }
-
-  // ---------- detail ----------
-  function renderLandingsInDetail(card) {
-    var countEl = document.getElementById("landingsCount");
-    var listEl = document.getElementById("landingsList");
-    var landings = card.landings || [];
-    countEl.textContent = landings.length;
-    if (landings.length === 0) {
-      listEl.innerHTML = '<div class="landings-empty">no landings logged yet</div>';
-      return;
-    }
-    var sorted = landings.slice().sort(function (a, b) { return b.at - a.at; });
-    listEl.innerHTML = sorted.map(function (l, i) {
-      var dateStr = formatShortDate(l.at);
-      var imgs = landingImages(l);
-      var tally = landingTally(l);
-      var fileControls = imgs.length === 0
-        ? '<button type="button" class="lattach" data-at="' + l.at + '">attach</button>'
-        : '<button type="button" class="lview" data-at="' + l.at + '">view' + (imgs.length > 1 ? " (" + imgs.length + ")" : "") + '</button>' +
-          '<button type="button" class="lremovefile" data-at="' + l.at + '">remove file</button>';
-      return (
-        '<div class="landing-item" data-at="' + l.at + '">' +
-        '<span>' + escapeHtml(l.text) + fileControls +
-        '<span class="ldate">' + dateStr + '</span>' +
-        '<span class="ltally mono">&times;' + tally + '</span>' +
-        '<button type="button" class="ltallyplus" data-at="' + l.at + '" title="log another rep here">+1</button>' +
-        '<button type="button" class="ltallyminus" data-at="' + l.at + '" title="remove a logged rep">-1</button>' +
-        "</span>" +
-        '<button type="button" class="lremove" data-at="' + l.at + '">remove</button>' +
-        "</div>"
-      );
-    }).join("");
-    listEl.querySelectorAll(".ltallyplus").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var entry = (card.landings || []).find(function (l) { return l.at === at; });
-        if (!entry) return;
-        entry.count = landingTally(entry) + 1;
-        dbPut(card).then(function () {
-          renderLandingsInDetail(card);
-          toast("logged another rep");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    listEl.querySelectorAll(".ltallyminus").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var entry = (card.landings || []).find(function (l) { return l.at === at; });
-        if (!entry) return;
-        entry.count = Math.max(1, landingTally(entry) - 1);
-        dbPut(card).then(function () {
-          renderLandingsInDetail(card);
-          toast("removed a rep");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    listEl.querySelectorAll(".lview").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var l = (card.landings || []).find(function (l2) { return l2.at === at; });
-        var imgs = landingImages(l);
-        if (imgs.length) openImageNewTab(imgs[0]);
-      });
-    });
-    listEl.querySelectorAll(".lattach").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var at = parseFloat(btn.getAttribute("data-at"));
-        openAttachPicker(card, at, function () { renderLandingsInDetail(card); });
-      });
-    });
-    listEl.querySelectorAll(".lremovefile").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var entry = (card.landings || []).find(function (l) { return l.at === at; });
-        if (!entry) return;
-        entry.images = [];
-        entry.image = null;
-        entry.fileName = null;
-        dbPut(card).then(function () {
-          renderLandingsInDetail(card);
-          toast("file removed");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-    listEl.querySelectorAll(".lremove").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var at = parseFloat(btn.getAttribute("data-at"));
-        var card2 = cards.find(function (c) { return c.id === detailCardId; });
-        if (!card2) return;
-        card2.landings = (card2.landings || []).filter(function (l) { return l.at !== at; });
-        dbPut(card2).then(function () {
-          renderLandingsInDetail(card2);
-          toast("landing removed");
-        }).catch(function () { toast("couldn't save"); });
-      });
-    });
-  }
-
-  // ---------- attach a photo/PDF to any landing, from anywhere in the app ----------
-  var landingFileInput = document.getElementById("landingFileInput");
-  var attachContext = null; // { cardId, at, onSaved }
-
-  function openAttachPicker(card, at, onSaved) {
-    attachContext = { cardId: card.id, at: at, onSaved: onSaved };
-    landingFileInput.value = "";
-    landingFileInput.click();
-  }
-
-  landingFileInput.addEventListener("change", function () {
-    var file = landingFileInput.files[0];
-    if (!file || !attachContext) return;
-    var ctx = attachContext;
-    var fileName = file.name || "";
-
-    function saveImagesToLanding(urls) {
-      var card = cards.find(function (c) { return c.id === ctx.cardId; });
-      if (!card) return;
-      var entry = (card.landings || []).find(function (l) { return l.at === ctx.at; });
-      if (!entry) return;
-      entry.images = urls;
-      entry.image = null;
-      entry.fileName = fileName;
-      dbPut(card).then(function () {
-        toast(urls.length > 1 ? "attached (" + urls.length + " pages)" : "attached");
-        if (ctx.onSaved) ctx.onSaved();
-      }).catch(function () { toast("couldn't save"); });
-    }
-
-    if (isPdfFile(file)) {
-      if (!window.pdfjsLib) { toast("PDF reader didn't load \u2014 try a photo instead"); return; }
-      var reader = new FileReader();
-      reader.onerror = function () { toast("couldn't read that file"); };
-      reader.onload = function () {
-        var typedarray = new Uint8Array(reader.result);
-        pdfjsLib.getDocument({ data: typedarray }).promise.then(function (pdf) {
-          return renderAllPdfPagesToDataUrls(pdf).then(saveImagesToLanding);
-        }).catch(function (err) {
-          console.error(err);
-          toast("couldn't read that PDF");
-        });
-      };
-      reader.readAsArrayBuffer(file);
-    } else {
-      fileToCompressedDataURL(file).then(function (url) { saveImagesToLanding([url]); })
-        .catch(function () { toast("couldn't read that photo"); });
-    }
-    landingFileInput.value = "";
-    attachContext = null;
-  });
-
-  document.getElementById("landingAddBtn").addEventListener("click", function () {
-    var input = document.getElementById("landingInput");
-    var text = input.value.trim();
-    if (!text) return;
-    var card = cards.find(function (c) { return c.id === detailCardId; });
-    if (!card) return;
-    card.landings = card.landings || [];
-    card.landings.push({ text: text, at: Date.now(), image: null, count: 1 });
-    dbPut(card).then(function () {
-      input.value = "";
-      renderLandingsInDetail(card);
-      toast("landing added");
-    }).catch(function () { toast("couldn't save"); });
-  });
-
-  document.getElementById("landingInput").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      document.getElementById("landingAddBtn").click();
-    }
-  });
-
-  function openDetail(id) {
-    var card = cards.find(function (c) { return c.id === id; });
-    if (!card) return;
-    detailCardId = id;
-    document.getElementById("detailFront").src = card.front || "";
-    var backWrap = document.getElementById("detailBackWrap");
-    var backImgEl = document.getElementById("detailBack2");
-    if (card.back) {
-      backImgEl.src = card.back;
-      backWrap.style.display = "block";
-    } else {
-      backWrap.style.display = "none";
-    }
-    document.getElementById("detailFront").onclick = function () { openImageNewTab(card.front); };
-    backImgEl.onclick = function () { openImageNewTab(card.back); };
-    document.getElementById("detailName").textContent = card.name || "untitled pattern";
-    document.getElementById("detailFrom").textContent = card.from || "";
-    var chip1 = document.getElementById("detailChip1");
-    var chip2 = document.getElementById("detailChip2");
-    chip1.classList.toggle("on", !!card.keysClean);
-    chip2.classList.toggle("on", !!card.unprompted);
-    document.getElementById("landingInput").value = "";
-    renderLandingsInDetail(card);
-
-    document.querySelectorAll("main > section").forEach(function (s) {
-      s.classList.remove("active");
-    });
-    document.getElementById("detail").classList.add("active");
-  }
-
-  document.getElementById("detailBack").addEventListener("click", function () {
-    document.getElementById("detail").classList.remove("active");
-    switchTab("all");
-  });
-
-  document.getElementById("detailChip1").addEventListener("click", function () {
-    var card = cards.find(function (c) { return c.id === detailCardId; });
-    if (!card) return;
-    card.keysClean = !card.keysClean;
-    this.classList.toggle("on", card.keysClean);
-    dbPut(card).catch(function () { toast("couldn't save"); });
-  });
-  document.getElementById("detailChip2").addEventListener("click", function () {
-    var card = cards.find(function (c) { return c.id === detailCardId; });
-    if (!card) return;
-    card.unprompted = !card.unprompted;
-    this.classList.toggle("on", card.unprompted);
-    dbPut(card).catch(function () { toast("couldn't save"); });
-  });
-
-  document.getElementById("deleteBtn").addEventListener("click", function () {
-    if (!detailCardId) return;
-    if (!confirm("Delete this card? This can't be undone.")) return;
-    dbDelete(detailCardId).then(function () {
-      cards = cards.filter(function (c) { return c.id !== detailCardId; });
-      renderCount();
-      document.getElementById("detail").classList.remove("active");
-      switchTab("all");
-      toast("card deleted");
-    }).catch(function () { toast("couldn't delete"); });
-  });
-
-  // ---------- add form: unified front/back upload (PDF or photo) ----------
-  var frontBox = document.getElementById("frontBox");
-  var backBox = document.getElementById("backBox");
-  var frontInput = document.getElementById("frontInput");
-  var backInput = document.getElementById("backInput");
-  var frontPreviewImg = document.getElementById("frontPreviewImg");
-  var backPreviewImg = document.getElementById("backPreviewImg");
-  var frontPlus = document.getElementById("frontPlus");
-  var backPlus = document.getElementById("backPlus");
-  var addBackLink = document.getElementById("addBackLink");
-  var backUploadWrap = document.getElementById("backUploadWrap");
-
-  frontBox.addEventListener("click", function () { frontInput.click(); });
-  backBox.addEventListener("click", function () { backInput.click(); });
-
-  addBackLink.addEventListener("click", function () {
-    backUploadWrap.style.display = "block";
-    addBackLink.style.display = "none";
-  });
-
-  function isPdfFile(file) {
-    return file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
-  }
-
-  // Reads a file (PDF or image) for a given slot ("front"/"back").
-  // A PDF's page 1 fills this slot; if this is the front slot and the PDF
-  // has a 2nd page, that page fills the back slot too (only if empty),
-  // so an old two-page export still works without extra steps.
-  function handleFileForSlot(file, slot) {
-    if (!file) return;
-    var isFront = slot === "front";
-    var previewImg = isFront ? frontPreviewImg : backPreviewImg;
-    var plusEl = isFront ? frontPlus : backPlus;
-
-    if (isPdfFile(file)) {
-      if (!window.pdfjsLib) {
-        toast("PDF reader didn't load \u2014 try a photo instead");
-        return;
-      }
-      toast("reading PDF\u2026");
-      var reader = new FileReader();
-      reader.onerror = function () { toast("couldn't read that file"); };
-      reader.onload = function () {
-        var typedarray = new Uint8Array(reader.result);
-        pdfjsLib.getDocument({ data: typedarray }).promise.then(function (pdf) {
-          return renderPdfPageToDataUrl(pdf, 1).then(function (page1) {
-            if (isFront) {
-              pendingFront = page1;
-              frontPreviewImg.src = page1;
-              frontPreviewImg.style.display = "block";
-              frontPlus.style.display = "none";
-              if (pdf.numPages >= 2 && !pendingBack) {
-                return renderPdfPageToDataUrl(pdf, 2).then(function (page2) {
-                  pendingBack = page2;
-                  backUploadWrap.style.display = "block";
-                  addBackLink.style.display = "none";
-                  backPreviewImg.src = page2;
-                  backPreviewImg.style.display = "block";
-                  backPlus.style.display = "none";
-                  toast("front & back loaded from PDF");
-                });
-              }
-              toast("front loaded");
-            } else {
-              pendingBack = page1;
-              backPreviewImg.src = page1;
-              backPreviewImg.style.display = "block";
-              backPlus.style.display = "none";
-              toast("back loaded");
-            }
-          });
-        }).catch(function (err) {
-          console.error(err);
-          toast("couldn't read that PDF");
-        });
-      };
-      reader.readAsArrayBuffer(file);
-    } else {
-      fileToCompressedDataURL(file).then(function (dataUrl) {
-        if (isFront) { pendingFront = dataUrl; } else { pendingBack = dataUrl; }
-        previewImg.src = dataUrl;
-        previewImg.style.display = "block";
-        plusEl.style.display = "none";
-      }).catch(function () { toast("couldn't read that photo"); });
-    }
-  }
-
-  frontInput.addEventListener("change", function () {
-    handleFileForSlot(frontInput.files[0], "front");
-  });
-  backInput.addEventListener("change", function () {
-    handleFileForSlot(backInput.files[0], "back");
-  });
-
-  function resetUploadVisuals() {
-    pendingFront = null;
-    pendingBack = null;
-    frontInput.value = "";
-    backInput.value = "";
-    frontPreviewImg.style.display = "none";
-    backPreviewImg.style.display = "none";
-    frontPlus.style.display = "block";
-    backPlus.style.display = "block";
-    backUploadWrap.style.display = "none";
-    addBackLink.style.display = "block";
-  }
-
-  document.getElementById("saveBtn").addEventListener("click", function () {
-    var name = document.getElementById("nameInput").value.trim();
-    var from = document.getElementById("fromInput").value.trim();
-
-    if (!pendingFront && !pendingBack) {
-      toast("add at least a front scan");
-      return;
-    }
-
-    var card = {
-      id: "card_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
-      name: name,
-      from: from,
-      front: pendingFront,
-      back: pendingBack,
-      keysClean: false,
-      unprompted: false,
-      landings: [],
-      createdAt: Date.now()
-    };
-
-    dbPut(card).then(function () {
-      cards.push(card);
-      renderCount();
-      resetAddForm();
-      toast("card saved");
-      switchTab("practice");
-      currentPull = [];
-      renderPractice();
-    }).catch(function () {
-      toast("couldn't save — storage may be full");
-    });
-  });
-
-  function resetAddForm() {
-    document.getElementById("nameInput").value = "";
-    document.getElementById("fromInput").value = "";
-    resetUploadVisuals();
-  }
-
-  // ---------- open image full-size in a new tab (never downloads) ----------
   function openImageNewTab(dataUrl) {
     if (!dataUrl) return;
     try {
@@ -1771,31 +515,724 @@
       var blob = new Blob([u8arr], { type: mime });
       var url = URL.createObjectURL(blob);
       var win = window.open(url, "_blank");
-      if (!win) { toast("allow pop-ups to view full size"); }
+      if (!win) toast("allow pop-ups to view full size");
       setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
     } catch (err) {
       window.open(dataUrl, "_blank");
     }
   }
 
-  // ---------- utils ----------
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+  // ---------- shared file picker (used for phrase scan, motif scan, landing attachment) ----------
+  var sharedFileInput = document.getElementById("sharedFileInput");
+  function pickFile(onResolve) {
+    pendingAttachResolve = onResolve;
+    sharedFileInput.value = "";
+    sharedFileInput.click();
   }
+  sharedFileInput.addEventListener("change", function () {
+    var file = sharedFileInput.files[0];
+    var resolve = pendingAttachResolve;
+    pendingAttachResolve = null;
+    if (!file || !resolve) return;
+    var fileName = file.name || "";
+    if (isPdfFile(file)) {
+      if (!window.pdfjsLib) { toast("PDF reader didn't load \u2014 try a photo instead"); return; }
+      toast("reading PDF\u2026");
+      var reader = new FileReader();
+      reader.onerror = function () { toast("couldn't read that file"); };
+      reader.onload = function () {
+        var typedarray = new Uint8Array(reader.result);
+        pdfjsLib.getDocument({ data: typedarray }).promise.then(function (pdf) {
+          return renderAllPdfPagesToDataUrls(pdf).then(function (urls) { resolve(urls, fileName); });
+        }).catch(function (err) { console.error(err); toast("couldn't read that PDF"); });
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      fileToCompressedDataURL(file).then(function (url) { resolve([url], fileName); })
+        .catch(function () { toast("couldn't read that photo"); });
+    }
+  });
+
+  // ---------- tabs ----------
+  var tabButtons = document.querySelectorAll("nav.tabs button");
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () { switchTab(btn.getAttribute("data-tab")); });
+  });
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll("main > section").forEach(function (s) { s.classList.remove("active"); });
+    document.getElementById(tab === "phraseDetail" ? "phraseDetail" : tab).classList.add("active");
+    tabButtons.forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-tab") === tab); });
+    if (tab === "practice") renderPractice();
+    if (tab === "phrases") renderPhraseList();
+  }
+
+  function renderCount() {
+    var motifCount = 0;
+    phrases.forEach(function (p) { motifCount += (p.motifs || []).length; });
+    document.getElementById("deckCount").textContent =
+      phrases.length + (phrases.length === 1 ? " phrase" : " phrases") + " \u00b7 " +
+      motifCount + (motifCount === 1 ? " motif" : " motifs");
+  }
+
+  // =========================================================
+  // MOTIF PANEL (shared builder: used in Phrase Detail accordion AND Practice)
+  // =========================================================
+  function buildMotifFileControlsHTML(motif) {
+    var imgs = motif.images || [];
+    var imageBox = "", extraPages = "", fileAction = "";
+    if (imgs.length) {
+      imageBox = '<div class="motif-image-box" data-role="motif-image" data-idx="0"><img src="' + imgs[0] + '" alt="motif scan"></div>';
+      if (imgs.length > 1) {
+        extraPages = '<div class="attached-files-list">' +
+          imgs.slice(1).map(function (u, i) {
+            var idx = i + 1;
+            var label = motif.fileName ? motif.fileName + " \u00b7 p" + (idx + 1) : "p" + (idx + 1);
+            return '<button type="button" class="file-line" data-role="motiffile-open" data-idx="' + idx + '">' + escapeHtml(label) + '</button>';
+          }).join("") + "</div>";
+      }
+      fileAction = '<button type="button" class="link-btn" data-role="motiffile-attach">replace scan</button>' +
+        '<button type="button" class="link-btn muted" data-role="motiffile-remove">remove file</button>';
+    } else {
+      imageBox = '<div class="motif-image-box"><span class="placeholder">no scan yet</span></div>';
+      fileAction = '<button type="button" class="link-btn" data-role="motiffile-attach">attach scan</button>';
+    }
+    return imageBox + extraPages + '<div class="attach-row">' + fileAction + '</div>';
+  }
+
+  function buildLandingsListHTML(motif) {
+    var landings = (motif.landings || []).slice().sort(function (a, b) { return b.at - a.at; });
+    if (landings.length === 0) return '<div class="landings-empty">no landings logged yet</div>';
+    return landings.map(function (l) {
+      var imgs = l.images || (l.image ? [l.image] : []);
+      var dateStr = formatShortDate(l.at);
+      var tally = landingTally(l);
+      var toggle = "", fileAction = "", strip = "";
+      if (imgs.length) {
+        toggle = '<button type="button" class="attach-toggle" data-role="lfile-toggle" data-at="' + l.at + '">' +
+          (imgs.length > 1 ? imgs.length + " pages" : "preview") + ' <span class="chev">&#9662;</span></button>';
+        fileAction = '<button type="button" class="link-btn muted" data-role="lfile-remove" data-at="' + l.at + '">remove file</button>';
+        strip = '<div class="attached-files-list" data-role="lfile-list" data-at="' + l.at + '" style="display:none;">' +
+          imgs.map(function (u, i) {
+            var label = l.fileName ? l.fileName + (imgs.length > 1 ? " \u00b7 p" + (i + 1) : "") : "p" + (i + 1);
+            return '<button type="button" class="file-line" data-role="lfile-open" data-at="' + l.at + '" data-idx="' + i + '">' + escapeHtml(label) + '</button>';
+          }).join("") + "</div>";
+      } else {
+        fileAction = '<button type="button" class="link-btn" data-role="lfile-attach" data-at="' + l.at + '">attach file</button>';
+      }
+      return (
+        '<div class="landing-item" data-at="' + l.at + '">' +
+        '<div class="lrow"><span class="ltext">' + escapeHtml(l.text) + '</span>' +
+        '<span class="ldate">' + dateStr + '</span>' +
+        '<span class="ltally mono">&times;' + tally + '</span>' +
+        '<button type="button" class="tallybtn" data-role="tally-plus" data-at="' + l.at + '">+1</button>' +
+        '<button type="button" class="tallybtn minus" data-role="tally-minus" data-at="' + l.at + '">-1</button>' +
+        '<button type="button" class="lremove" data-role="landing-remove" data-at="' + l.at + '">remove</button>' +
+        "</div>" +
+        '<div class="attach-row">' + toggle + fileAction + '</div>' +
+        strip +
+        "</div>"
+      );
+    }).join("");
+  }
+
+  function buildMotifPanelHTML(motif) {
+    var landingCount = (motif.landings || []).length;
+    return (
+      buildMotifFileControlsHTML(motif) +
+      '<div class="chips">' +
+      '<div class="chip keys ' + (motif.keysClean ? "on" : "") + '" data-role="chip-keys">12 keys clean</div>' +
+      '<div class="chip unprompted ' + (motif.unprompted ? "on" : "") + '" data-role="chip-unprompted">showed up unprompted</div>' +
+      "</div>" +
+      '<div class="landings-block">' +
+      '<div class="landings-head"><span class="landings-title">landed in</span><span class="landings-count mono" data-role="landings-count">' + landingCount + '</span></div>' +
+      '<div class="landing-add-row"><input type="text" data-role="landing-input" class="mono" placeholder="tune + spot"><button type="button" data-role="landing-add">add</button></div>' +
+      '<div data-role="landings-list">' + buildLandingsListHTML(motif) + '</div>' +
+      "</div>"
+    );
+  }
+
+  // Wires all interactions inside a rendered motif panel element.
+  // getMotif() must return the *current* motif object (re-fetched, since arrays get replaced).
+  function wireMotifPanel(panelEl, phrase, getMotif, onChange) {
+    function refresh() {
+      var motif = getMotif();
+      panelEl.innerHTML = buildMotifPanelHTML(motif);
+      wire();
+      if (onChange) onChange();
+    }
+    function save(then) {
+      dbPut(phrase).then(function () { if (then) then(); }).catch(function () { toast("couldn't save"); });
+    }
+    function wire() {
+      var motif = getMotif();
+
+      var imageBox = panelEl.querySelector('[data-role="motif-image"]');
+      if (imageBox) imageBox.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var m = getMotif();
+        if (m.images && m.images[0]) openImageNewTab(m.images[0]);
+      });
+      panelEl.querySelectorAll('[data-role="motiffile-open"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var idx = parseInt(btn.getAttribute("data-idx"), 10);
+          var m = getMotif();
+          if (m.images && m.images[idx]) openImageNewTab(m.images[idx]);
+        });
+      });
+      var fileAttach = panelEl.querySelector('[data-role="motiffile-attach"]');
+      if (fileAttach) fileAttach.addEventListener("click", function (e) {
+        e.stopPropagation();
+        pickFile(function (urls, fileName) {
+          var m = getMotif();
+          m.images = urls; m.fileName = fileName;
+          save(function () { toast(urls.length > 1 ? "attached (" + urls.length + " pages)" : "attached"); refresh(); });
+        });
+      });
+      var fileRemove = panelEl.querySelector('[data-role="motiffile-remove"]');
+      if (fileRemove) fileRemove.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var m = getMotif();
+        m.images = []; m.fileName = null;
+        save(function () { toast("file removed"); refresh(); });
+      });
+
+      var chipKeys = panelEl.querySelector('[data-role="chip-keys"]');
+      chipKeys.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var m = getMotif();
+        m.keysClean = !m.keysClean;
+        chipKeys.classList.toggle("on", m.keysClean);
+        save();
+      });
+      var chipUnprompted = panelEl.querySelector('[data-role="chip-unprompted"]');
+      chipUnprompted.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var m = getMotif();
+        m.unprompted = !m.unprompted;
+        chipUnprompted.classList.toggle("on", m.unprompted);
+        save();
+      });
+
+      var addBtn = panelEl.querySelector('[data-role="landing-add"]');
+      var addInput = panelEl.querySelector('[data-role="landing-input"]');
+      addInput.addEventListener("click", function (e) { e.stopPropagation(); });
+      function doAdd(e) {
+        e.stopPropagation();
+        var text = addInput.value.trim();
+        if (!text) return;
+        var m = getMotif();
+        m.landings = m.landings || [];
+        m.landings.push({ text: text, at: Date.now(), images: [], fileName: null, count: 1 });
+        save(function () { toast("landing added"); refresh(); });
+      }
+      addBtn.addEventListener("click", doAdd);
+      addInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doAdd(e); } });
+
+      panelEl.querySelectorAll('[data-role="tally-plus"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = parseFloat(btn.getAttribute("data-at"));
+          var l = findLanding(getMotif(), at);
+          if (!l) return;
+          l.count = landingTally(l) + 1;
+          save(function () { toast("logged another rep"); refresh(); });
+        });
+      });
+      panelEl.querySelectorAll('[data-role="tally-minus"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = parseFloat(btn.getAttribute("data-at"));
+          var l = findLanding(getMotif(), at);
+          if (!l) return;
+          l.count = Math.max(1, landingTally(l) - 1);
+          save(function () { toast("removed a rep"); refresh(); });
+        });
+      });
+      panelEl.querySelectorAll('[data-role="landing-remove"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = parseFloat(btn.getAttribute("data-at"));
+          var m = getMotif();
+          m.landings = (m.landings || []).filter(function (l) { return l.at !== at; });
+          save(function () { toast("landing removed"); refresh(); });
+        });
+      });
+      panelEl.querySelectorAll('[data-role="lfile-toggle"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = btn.getAttribute("data-at");
+          var list = panelEl.querySelector('[data-role="lfile-list"][data-at="' + at + '"]');
+          var open = list.style.display !== "none";
+          list.style.display = open ? "none" : "flex";
+          btn.classList.toggle("open", !open);
+        });
+      });
+      panelEl.querySelectorAll('[data-role="lfile-open"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = parseFloat(btn.getAttribute("data-at"));
+          var idx = parseInt(btn.getAttribute("data-idx"), 10);
+          var l = findLanding(getMotif(), at);
+          var imgs = l && (l.images || (l.image ? [l.image] : []));
+          if (imgs && imgs[idx]) openImageNewTab(imgs[idx]);
+        });
+      });
+      panelEl.querySelectorAll('[data-role="lfile-attach"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = parseFloat(btn.getAttribute("data-at"));
+          pickFile(function (urls, fileName) {
+            var l = findLanding(getMotif(), at);
+            if (!l) return;
+            l.images = urls; l.fileName = fileName;
+            save(function () { toast(urls.length > 1 ? "attached (" + urls.length + " pages)" : "attached"); refresh(); });
+          });
+        });
+      });
+      panelEl.querySelectorAll('[data-role="lfile-remove"]').forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var at = parseFloat(btn.getAttribute("data-at"));
+          var l = findLanding(getMotif(), at);
+          if (!l) return;
+          l.images = []; l.fileName = null;
+          save(function () { toast("file removed"); refresh(); });
+        });
+      });
+    }
+    refresh();
+  }
+
+  // =========================================================
+  // PRACTICE
+  // =========================================================
+  function phrasesWithMotifs() {
+    return phrases.filter(function (p) { return (p.motifs || []).length > 0; });
+  }
+  function pickRandomPhrases(n) {
+    var pool = phrasesWithMotifs().map(function (p) { return p.id; });
+    var picked = [];
+    n = Math.min(n, pool.length);
+    for (var i = 0; i < n; i++) {
+      var idx = Math.floor(Math.random() * pool.length);
+      picked.push(pool[idx]);
+      pool.splice(idx, 1);
+    }
+    return picked;
+  }
+  function newPull() { currentPull = pickRandomPhrases(pullSize); renderPractice(); }
+
+  function renderPractice() {
+    var area = document.getElementById("practiceArea");
+    area.innerHTML = "";
+    var total = phrasesWithMotifs().length;
+
+    if (total === 0) {
+      area.innerHTML =
+        '<div class="empty"><div class="big">No motifs yet</div>' +
+        '<div class="small mono">add a phrase, then add a motif inside it</div></div>';
+      return;
+    }
+
+    if (currentPull.length === 0) currentPull = pickRandomPhrases(pullSize);
+    currentPull = currentPull.filter(function (id) {
+      var p = findPhrase(id);
+      return p && (p.motifs || []).length > 0;
+    });
+    if (currentPull.length === 0) currentPull = pickRandomPhrases(pullSize);
+
+    currentPull.forEach(function (phraseId, i) {
+      var phrase = findPhrase(phraseId);
+      if (!phrase) return;
+      var block = document.createElement("div");
+      if (i > 0) block.style.marginTop = "34px";
+
+      var imgsHtml = "";
+      if (phrase.front || phrase.back) {
+        imgsHtml = '<div class="detail-imgs">' +
+          '<div class="face-static" data-role="p-front"><img src="' + (phrase.front || "") + '" alt="front"></div>' +
+          (phrase.back ? '<div class="face-static" data-role="p-back"><img src="' + phrase.back + '" alt="back"></div>' : "") +
+          "</div>";
+      }
+      block.innerHTML =
+        imgsHtml +
+        '<div class="meta-name">' + escapeHtml(phrase.name || "untitled phrase") + '</div>' +
+        (phrase.from ? '<div class="meta-from mono">' + escapeHtml(phrase.from) + '</div>' : "") +
+        '<div class="section-head"><span class="st">motifs</span></div>' +
+        '<div data-role="motifs-target"></div>';
+      area.appendChild(block);
+
+      var pfront = block.querySelector('[data-role="p-front"]');
+      if (pfront) pfront.addEventListener("click", function () { openImageNewTab(phrase.front); });
+      var pback = block.querySelector('[data-role="p-back"]');
+      if (pback) pback.addEventListener("click", function () { openImageNewTab(phrase.back); });
+
+      var motifsTarget = block.querySelector('[data-role="motifs-target"]');
+      var motifs = (phrase.motifs || []).slice().sort(function (a, b) { return a.createdAt - b.createdAt; });
+      motifs.forEach(function (m) {
+        motifsTarget.appendChild(createMotifAccordionElement(phrase, m.id, { showRemove: false, startOpen: false }));
+      });
+    });
+
+    var controls = document.createElement("div");
+    controls.innerHTML =
+      '<div class="practice-controls"><button class="primary" id="newPullBtn">Shuffle new pull</button></div>' +
+      '<div class="pull-size"><span>pull&nbsp;</span>' +
+      '<button data-n="1" class="' + (pullSize === 1 ? "active" : "") + '">1</button>' +
+      '<button data-n="2" class="' + (pullSize === 2 ? "active" : "") + '">2</button></div>';
+    area.appendChild(controls);
+    document.getElementById("newPullBtn").addEventListener("click", newPull);
+    controls.querySelectorAll(".pull-size button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        pullSize = parseInt(b.getAttribute("data-n"), 10);
+        currentPull = [];
+        renderPractice();
+      });
+    });
+  }
+
+  // =========================================================
+  // PHRASE LIST
+  // =========================================================
+  function renderPhraseList() {
+    var list = document.getElementById("phraseListArea");
+    if (phrases.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="big">No phrases yet</div><div class="small mono">add your first transcribed phrase</div></div>';
+      return;
+    }
+    var sorted = phrases.slice().sort(function (a, b) { return b.createdAt - a.createdAt; });
+    list.innerHTML = sorted.map(function (p) {
+      var thumb = p.front ? '<img src="' + p.front + '" alt="">' : "";
+      var n = (p.motifs || []).length;
+      return (
+        '<div class="list-row" data-id="' + p.id + '">' +
+        '<div class="thumb">' + thumb + "</div>" +
+        '<div class="row-main">' +
+        '<div class="row-name">' + escapeHtml(p.name || "untitled phrase") + "</div>" +
+        '<div class="row-from">' + escapeHtml(p.from || "") + "</div>" +
+        '<div class="row-count">' + n + (n === 1 ? " motif" : " motifs") + "</div>" +
+        "</div></div>"
+      );
+    }).join("");
+    list.querySelectorAll(".list-row").forEach(function (row) {
+      row.addEventListener("click", function () { openPhraseDetail(row.getAttribute("data-id")); });
+    });
+  }
+
+  // =========================================================
+  // PHRASE DETAIL
+  // =========================================================
+  function openPhraseDetail(id) {
+    var phrase = findPhrase(id);
+    if (!phrase) return;
+    currentPhraseId = id;
+    renderPhraseDetail();
+    document.querySelectorAll("main > section").forEach(function (s) { s.classList.remove("active"); });
+    document.getElementById("phraseDetail").classList.add("active");
+  }
+
+  function renderPhraseDetail() {
+    var phrase = findPhrase(currentPhraseId);
+    if (!phrase) return;
+    var imgsWrap = document.getElementById("phraseImgsWrap");
+    if (phrase.front || phrase.back) {
+      imgsWrap.style.display = "flex";
+      document.getElementById("detailFront").src = phrase.front || "";
+      document.getElementById("detailFront").onclick = function () { openImageNewTab(phrase.front); };
+      var backWrap = document.getElementById("detailBackWrap");
+      var backImgEl = document.getElementById("detailBack2");
+      if (phrase.back) {
+        backWrap.style.display = "block";
+        backImgEl.src = phrase.back;
+        backImgEl.onclick = function () { openImageNewTab(phrase.back); };
+      } else {
+        backWrap.style.display = "none";
+      }
+    } else {
+      imgsWrap.style.display = "none";
+    }
+    document.getElementById("detailName").textContent = phrase.name || "untitled phrase";
+    var fromEl = document.getElementById("detailFrom");
+    fromEl.textContent = phrase.from || "";
+    fromEl.style.display = phrase.from ? "block" : "none";
+    resetMotifPending();
+    renderMotifsList(phrase);
+  }
+
+  function createMotifAccordionElement(phrase, motifId, opts) {
+    opts = opts || {};
+    function getMotif() {
+      var p = findPhrase(phrase.id);
+      return findMotif(p, motifId);
+    }
+    var motif = getMotif();
+    if (!motif) return document.createElement("div");
+    var count = (motif.landings || []).length;
+    var block = document.createElement("div");
+    block.className = "motif-block";
+    block.innerHTML =
+      '<div class="motif-head' + (opts.startOpen ? " open" : "") + '" data-role="motif-head">' +
+      '<span class="mname">' + escapeHtml(motif.name || "untitled motif") + '</span>' +
+      '<span class="mcount mono">' + count + (count === 1 ? " landing" : " landings") + '</span>' +
+      (opts.showRemove ? '<button type="button" class="lremove" data-role="motif-remove">remove</button>' : "") +
+      '<span class="chev">&#9662;</span>' +
+      "</div>" +
+      '<div class="motif-panel' + (opts.startOpen ? " open" : "") + '" data-role="motif-panel"></div>';
+
+    var head = block.querySelector('[data-role="motif-head"]');
+    var panel = block.querySelector('[data-role="motif-panel"]');
+    var opened = false;
+
+    function openPanel() {
+      if (!opened) {
+        wireMotifPanel(panel, phrase, getMotif, function () {
+          var m = getMotif();
+          var countEl = block.querySelector(".mcount");
+          if (m && countEl) {
+            var c = (m.landings || []).length;
+            countEl.textContent = c + (c === 1 ? " landing" : " landings");
+          }
+        });
+        opened = true;
+      }
+      panel.classList.add("open");
+      head.classList.add("open");
+    }
+
+    head.addEventListener("click", function () {
+      var isOpen = panel.classList.contains("open");
+      if (isOpen) { panel.classList.remove("open"); head.classList.remove("open"); }
+      else { openPanel(); }
+    });
+
+    if (opts.showRemove) {
+      block.querySelector('[data-role="motif-remove"]').addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!confirm("Remove this motif and its landing history?")) return;
+        var p = findPhrase(phrase.id);
+        p.motifs = (p.motifs || []).filter(function (m) { return m.id !== motifId; });
+        dbPut(p).then(function () {
+          renderCount();
+          renderMotifsList(p);
+          toast("motif removed");
+        }).catch(function () { toast("couldn't save"); });
+      });
+    }
+
+    if (opts.startOpen) openPanel();
+    return block;
+  }
+
+  function renderMotifsList(phrase) {
+    var container = document.getElementById("motifsList");
+    var motifs = (phrase.motifs || []).slice().sort(function (a, b) { return a.createdAt - b.createdAt; });
+    container.innerHTML = "";
+    if (motifs.length === 0) {
+      container.innerHTML = '<div class="landings-empty">no motifs added yet</div>';
+      return;
+    }
+    motifs.forEach(function (m) {
+      container.appendChild(createMotifAccordionElement(phrase, m.id, { showRemove: true, startOpen: false }));
+    });
+  }
+
+  var pendingMotifImages = null, pendingMotifFileName = null;
+
+  function createMotif(phrase, name, images, fileName) {
+    phrase.motifs = phrase.motifs || [];
+    var motif = {
+      id: "motif_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+      name: name || ("motif " + (phrase.motifs.length + 1)),
+      images: images || [], fileName: fileName || null,
+      keysClean: false, unprompted: false, landings: [],
+      createdAt: Date.now()
+    };
+    phrase.motifs.push(motif);
+    return motif;
+  }
+
+  function resetMotifPending() {
+    pendingMotifImages = null; pendingMotifFileName = null;
+    document.getElementById("motifPendingWrap").style.display = "none";
+    document.getElementById("motifQuickAddRow").style.display = "block";
+    document.getElementById("motifNameInput").value = "";
+    document.getElementById("motifNoFileWrap").style.display = "none";
+    document.getElementById("motifNoFileLink").style.display = "block";
+    document.getElementById("motifNoFileNameInput").value = "";
+  }
+
+  document.getElementById("motifUploadBtn").addEventListener("click", function () {
+    pickFile(function (urls, fileName) {
+      pendingMotifImages = urls;
+      pendingMotifFileName = fileName;
+      document.getElementById("motifPendingLabel").textContent =
+        fileName + (urls.length > 1 ? " (" + urls.length + " pages)" : "") + " \u2014 ready";
+      var guess = fileName ? fileName.replace(/\.[^.]+$/, "") : "";
+      var nameInput = document.getElementById("motifNameInput");
+      nameInput.value = guess;
+      document.getElementById("motifQuickAddRow").style.display = "none";
+      document.getElementById("motifPendingWrap").style.display = "block";
+      document.getElementById("motifNoFileLink").style.display = "none";
+      nameInput.focus();
+      nameInput.select();
+    });
+  });
+
+  document.getElementById("motifSaveBtn").addEventListener("click", function () {
+    var phrase = findPhrase(currentPhraseId);
+    if (!phrase || !pendingMotifImages) return;
+    var name = document.getElementById("motifNameInput").value.trim();
+    createMotif(phrase, name, pendingMotifImages, pendingMotifFileName);
+    dbPut(phrase).then(function () {
+      renderCount();
+      renderMotifsList(phrase);
+      resetMotifPending();
+      toast("motif added");
+    }).catch(function () { toast("couldn't save"); });
+  });
+
+  document.getElementById("motifCancelBtn").addEventListener("click", function () { resetMotifPending(); });
+
+  document.getElementById("motifNoFileLink").addEventListener("click", function () {
+    document.getElementById("motifNoFileWrap").style.display = "block";
+    this.style.display = "none";
+  });
+
+  document.getElementById("motifNoFileAddBtn").addEventListener("click", function () {
+    var phrase = findPhrase(currentPhraseId);
+    if (!phrase) return;
+    var nameInput = document.getElementById("motifNoFileNameInput");
+    createMotif(phrase, nameInput.value.trim(), [], null);
+    dbPut(phrase).then(function () {
+      renderCount();
+      renderMotifsList(phrase);
+      resetMotifPending();
+      toast("motif added \u2014 attach its scan below");
+    }).catch(function () { toast("couldn't save"); });
+  });
+
+  document.getElementById("detailBack").addEventListener("click", function () { switchTab("phrases"); });
+
+  document.getElementById("deletePhraseBtn").addEventListener("click", function () {
+    if (!currentPhraseId) return;
+    if (!confirm("Delete this phrase and all its motifs? This can't be undone.")) return;
+    dbDelete(currentPhraseId).then(function () {
+      phrases = phrases.filter(function (p) { return p.id !== currentPhraseId; });
+      renderCount();
+      switchTab("phrases");
+      toast("phrase deleted");
+    }).catch(function () { toast("couldn't delete"); });
+  });
+
+  // =========================================================
+  // ADD PHRASE
+  // =========================================================
+  var frontBox = document.getElementById("frontBox");
+  var backBox = document.getElementById("backBox");
+  var frontInput = document.getElementById("frontInput");
+  var backInput = document.getElementById("backInput");
+  var frontPreviewImg = document.getElementById("frontPreviewImg");
+  var backPreviewImg = document.getElementById("backPreviewImg");
+  var frontPlus = document.getElementById("frontPlus");
+  var backPlus = document.getElementById("backPlus");
+  var addBackLink = document.getElementById("addBackLink");
+  var backUploadWrap = document.getElementById("backUploadWrap");
+
+  frontBox.addEventListener("click", function () { frontInput.click(); });
+  backBox.addEventListener("click", function () { backInput.click(); });
+  addBackLink.addEventListener("click", function () {
+    backUploadWrap.style.display = "block";
+    addBackLink.style.display = "none";
+  });
+
+  function handleAddFormFile(file, isFront) {
+    if (!file) return;
+    var previewImg = isFront ? frontPreviewImg : backPreviewImg;
+    var plusEl = isFront ? frontPlus : backPlus;
+    if (isPdfFile(file)) {
+      if (!window.pdfjsLib) { toast("PDF reader didn't load \u2014 try a photo instead"); return; }
+      toast("reading PDF\u2026");
+      var reader = new FileReader();
+      reader.onerror = function () { toast("couldn't read that file"); };
+      reader.onload = function () {
+        var typedarray = new Uint8Array(reader.result);
+        pdfjsLib.getDocument({ data: typedarray }).promise.then(function (pdf) {
+          return renderPdfPageToDataUrl(pdf, 1).then(function (page1) {
+            if (isFront) {
+              pendingFront = page1;
+              frontPreviewImg.src = page1; frontPreviewImg.style.display = "block"; frontPlus.style.display = "none";
+              if (pdf.numPages >= 2 && !pendingBack) {
+                return renderPdfPageToDataUrl(pdf, 2).then(function (page2) {
+                  pendingBack = page2;
+                  backUploadWrap.style.display = "block"; addBackLink.style.display = "none";
+                  backPreviewImg.src = page2; backPreviewImg.style.display = "block"; backPlus.style.display = "none";
+                  toast("front & back loaded from PDF");
+                });
+              }
+              toast("front loaded");
+            } else {
+              pendingBack = page1;
+              backPreviewImg.src = page1; backPreviewImg.style.display = "block"; backPlus.style.display = "none";
+              toast("back loaded");
+            }
+          });
+        }).catch(function (err) { console.error(err); toast("couldn't read that PDF"); });
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      fileToCompressedDataURL(file).then(function (dataUrl) {
+        if (isFront) pendingFront = dataUrl; else pendingBack = dataUrl;
+        previewImg.src = dataUrl; previewImg.style.display = "block"; plusEl.style.display = "none";
+      }).catch(function () { toast("couldn't read that photo"); });
+    }
+  }
+  frontInput.addEventListener("change", function () { handleAddFormFile(frontInput.files[0], true); });
+  backInput.addEventListener("change", function () { handleAddFormFile(backInput.files[0], false); });
+
+  function resetAddForm() {
+    pendingFront = null; pendingBack = null;
+    document.getElementById("nameInput").value = "";
+    frontInput.value = ""; backInput.value = "";
+    frontPreviewImg.style.display = "none"; backPreviewImg.style.display = "none";
+    frontPlus.style.display = "block"; backPlus.style.display = "block";
+    backUploadWrap.style.display = "none"; addBackLink.style.display = "block";
+  }
+
+  document.getElementById("saveBtn").addEventListener("click", function () {
+    var name = document.getElementById("nameInput").value.trim();
+    var phrase = {
+      id: "phrase_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+      name: name, from: "", front: pendingFront, back: pendingBack,
+      createdAt: Date.now(), motifs: []
+    };
+    dbPut(phrase).then(function () {
+      phrases.push(phrase);
+      renderCount();
+      resetAddForm();
+      toast("phrase saved \u2014 now add a motif");
+      openPhraseDetail(phrase.id);
+    }).catch(function () { toast("couldn't save \u2014 storage may be full"); });
+  });
 
   // ---------- init ----------
   openDB().then(function (d) {
     db = d;
     return dbGetAll();
   }).then(function (all) {
-    cards = all || [];
+    var migrated = [];
+    var writes = [];
+    (all || []).forEach(function (item) {
+      var wasFlat = !item.motifs;
+      var p = migrateToPhrase(item);
+      migrated.push(p);
+      if (wasFlat) writes.push(dbPut(p));
+    });
+    phrases = migrated;
     renderCount();
     renderPractice();
+    return Promise.all(writes);
   }).catch(function (err) {
     toast("storage unavailable in this browser");
     console.error(err);
