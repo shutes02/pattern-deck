@@ -638,27 +638,56 @@
     }
   }
 
-  // Opens ALL pages of an attachment in a single new tab, stacked vertically and scrollable.
+  // Opens ALL pages of an attachment in a single new tab: one page fills the window at a time,
+  // navigable with the left/right arrow keys (also click zones + on-screen buttons for touch).
   function openGalleryNewTab(dataUrls, title) {
     if (!dataUrls || !dataUrls.length) return;
     if (dataUrls.length === 1) { openImageNewTab(dataUrls[0]); return; }
     try {
       var blobUrls = [];
-      var imgsHtml = "";
+      var srcsJs = "[";
       for (var i = 0; i < dataUrls.length; i++) {
         if (!dataUrls[i]) continue;
         var bUrl = dataUrlToBlobUrl(dataUrls[i]);
         blobUrls.push(bUrl);
-        imgsHtml += '<div class="pg"><div class="pglabel">page ' + (i + 1) + ' of ' + dataUrls.length + '</div><img src="' + bUrl + '" /></div>';
+        srcsJs += JSON.stringify(bUrl) + ",";
       }
+      srcsJs += "]";
+      var safeTitle = title ? String(title).replace(/[<>&]/g, "") : "attachment";
       var doc = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
-        '<title>' + (title ? String(title).replace(/[<>&]/g, "") : "attachment") + '</title>' +
+        '<title>' + safeTitle + '</title>' +
         '<style>' +
-        'body{margin:0;background:#111;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}' +
-        '.pg{display:flex;flex-direction:column;align-items:center;padding:18px 0;border-bottom:1px solid #333;}' +
-        '.pglabel{color:#999;font-size:13px;margin-bottom:10px;letter-spacing:.02em;}' +
-        '.pg img{max-width:96vw;height:auto;box-shadow:0 2px 12px rgba(0,0,0,.5);background:#fff;}' +
-        '</style></head><body>' + imgsHtml + '</body></html>';
+        'html,body{margin:0;height:100%;background:#111;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}' +
+        '.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}' +
+        '.stage img{max-width:98vw;max-height:98vh;width:auto;height:auto;object-fit:contain;background:#fff;box-shadow:0 2px 20px rgba(0,0,0,.6);user-select:none;}' +
+        '.zone{position:fixed;top:0;bottom:0;width:18%;cursor:pointer;background:transparent;z-index:2;}' +
+        '.zone.left{left:0;} .zone.right{right:0;}' +
+        '.nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;' +
+        'background:rgba(0,0,0,.55);color:#eee;padding:8px 16px;border-radius:24px;font-size:14px;z-index:3;letter-spacing:.02em;}' +
+        '.nav button{background:none;border:none;color:#eee;font-size:20px;line-height:1;cursor:pointer;padding:2px 8px;}' +
+        '.nav button:disabled{opacity:.3;cursor:default;}' +
+        '.hint{position:fixed;top:14px;left:50%;transform:translateX(-50%);color:#888;font-size:12px;z-index:3;}' +
+        '</style></head><body>' +
+        '<div class="hint">use &#8592; &#8594; arrow keys to change pages</div>' +
+        '<div class="stage"><img id="pg" alt="page"></div>' +
+        '<div class="zone left" id="zl"></div><div class="zone right" id="zr"></div>' +
+        '<div class="nav"><button id="prev">&#8249;</button><span id="cnt"></span><button id="next">&#8250;</button></div>' +
+        '<script>(function(){' +
+        'var srcs=' + srcsJs + ';var i=0;var img=document.getElementById("pg");' +
+        'var cnt=document.getElementById("cnt");var prev=document.getElementById("prev");var next=document.getElementById("next");' +
+        'function render(){img.src=srcs[i];cnt.textContent=(i+1)+" / "+srcs.length;prev.disabled=(i===0);next.disabled=(i===srcs.length-1);}' +
+        'function go(d){var n=i+d;if(n<0||n>=srcs.length)return;i=n;render();}' +
+        'document.addEventListener("keydown",function(e){' +
+        'if(e.key==="ArrowRight"||e.key==="ArrowDown"||e.key===" "){go(1);e.preventDefault();}' +
+        'else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){go(-1);e.preventDefault();}' +
+        '});' +
+        'document.getElementById("zl").addEventListener("click",function(){go(-1);});' +
+        'document.getElementById("zr").addEventListener("click",function(){go(1);});' +
+        'prev.addEventListener("click",function(){go(-1);});' +
+        'next.addEventListener("click",function(){go(1);});' +
+        'render();' +
+        '})();<\/script>' +
+        '</body></html>';
       var htmlBlob = new Blob([doc], { type: "text/html" });
       var htmlUrl = URL.createObjectURL(htmlBlob);
       var win = window.open(htmlUrl, "_blank");
