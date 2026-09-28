@@ -614,23 +614,61 @@
   }
   function isPdfFile(file) { return file.type === "application/pdf" || /\.pdf$/i.test(file.name || ""); }
 
+  function dataUrlToBlobUrl(dataUrl) {
+    var parts = dataUrl.split(",");
+    var mimeMatch = parts[0].match(/:(.*?);/);
+    var mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
+    var bstr = atob(parts[1]);
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+    var blob = new Blob([u8arr], { type: mime });
+    return URL.createObjectURL(blob);
+  }
+
   function openImageNewTab(dataUrl) {
     if (!dataUrl) return;
     try {
-      var parts = dataUrl.split(",");
-      var mimeMatch = parts[0].match(/:(.*?);/);
-      var mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
-      var bstr = atob(parts[1]);
-      var n = bstr.length;
-      var u8arr = new Uint8Array(n);
-      while (n--) { u8arr[n] = bstr.charCodeAt(n); }
-      var blob = new Blob([u8arr], { type: mime });
-      var url = URL.createObjectURL(blob);
+      var url = dataUrlToBlobUrl(dataUrl);
       var win = window.open(url, "_blank");
       if (!win) toast("allow pop-ups to view full size");
       setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
     } catch (err) {
       window.open(dataUrl, "_blank");
+    }
+  }
+
+  // Opens ALL pages of an attachment in a single new tab, stacked vertically and scrollable.
+  function openGalleryNewTab(dataUrls, title) {
+    if (!dataUrls || !dataUrls.length) return;
+    if (dataUrls.length === 1) { openImageNewTab(dataUrls[0]); return; }
+    try {
+      var blobUrls = [];
+      var imgsHtml = "";
+      for (var i = 0; i < dataUrls.length; i++) {
+        if (!dataUrls[i]) continue;
+        var bUrl = dataUrlToBlobUrl(dataUrls[i]);
+        blobUrls.push(bUrl);
+        imgsHtml += '<div class="pg"><div class="pglabel">page ' + (i + 1) + ' of ' + dataUrls.length + '</div><img src="' + bUrl + '" /></div>';
+      }
+      var doc = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
+        '<title>' + (title ? String(title).replace(/[<>&]/g, "") : "attachment") + '</title>' +
+        '<style>' +
+        'body{margin:0;background:#111;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}' +
+        '.pg{display:flex;flex-direction:column;align-items:center;padding:18px 0;border-bottom:1px solid #333;}' +
+        '.pglabel{color:#999;font-size:13px;margin-bottom:10px;letter-spacing:.02em;}' +
+        '.pg img{max-width:96vw;height:auto;box-shadow:0 2px 12px rgba(0,0,0,.5);background:#fff;}' +
+        '</style></head><body>' + imgsHtml + '</body></html>';
+      var htmlBlob = new Blob([doc], { type: "text/html" });
+      var htmlUrl = URL.createObjectURL(htmlBlob);
+      var win = window.open(htmlUrl, "_blank");
+      if (!win) toast("allow pop-ups to view full size");
+      setTimeout(function () {
+        URL.revokeObjectURL(htmlUrl);
+        blobUrls.forEach(function (u) { URL.revokeObjectURL(u); });
+      }, 120000);
+    } catch (err) {
+      openImageNewTab(dataUrls[0]);
     }
   }
 
@@ -815,14 +853,14 @@
       if (imageBox) imageBox.addEventListener("click", function (e) {
         e.stopPropagation();
         var m = getMotif();
-        if (m.images && m.images[0]) openImageNewTab(m.images[0]);
+        if (m.images && m.images.length) openGalleryNewTab(m.images, m.name || "motif");
       });
       panelEl.querySelectorAll('[data-role="motiffile-open"]').forEach(function (btn) {
         btn.addEventListener("click", function (e) {
           e.stopPropagation();
           var idx = parseInt(btn.getAttribute("data-idx"), 10);
           var m = getMotif();
-          if (m.images && m.images[idx]) openImageNewTab(m.images[idx]);
+          if (m.images && m.images[idx]) openGalleryNewTab(m.images, m.name || "motif");
         });
       });
       var fileAttach = panelEl.querySelector('[data-role="motiffile-attach"]');
@@ -920,7 +958,7 @@
           var idx = parseInt(btn.getAttribute("data-idx"), 10);
           var l = findLanding(getMotif(), at);
           var imgs = l && (l.images || (l.image ? [l.image] : []));
-          if (imgs && imgs[idx]) openImageNewTab(imgs[idx]);
+          if (imgs && imgs[idx]) openGalleryNewTab(imgs, l.text || "landing");
         });
       });
       panelEl.querySelectorAll('[data-role="lfile-attach"]').forEach(function (btn) {
@@ -1033,7 +1071,7 @@
         var cbox = chartBlock.querySelector('[data-role="chart-img"]');
         if (cimgs.length) {
           cbox.innerHTML = '<img src="' + cimgs[0] + '" alt="chart">';
-          cbox.onclick = function () { openImageNewTab(cimgs[0]); };
+          cbox.onclick = function () { openGalleryNewTab(cimgs, chart.name || "chart"); };
         } else {
           cbox.innerHTML = '<span class="placeholder">no scan</span>';
         }
@@ -1586,7 +1624,7 @@
     var mainBox = document.getElementById("chartDetailMainImage");
     if (imgs.length) {
       mainBox.innerHTML = '<img src="' + imgs[0] + '" alt="chart">';
-      mainBox.onclick = function () { openImageNewTab(imgs[0]); };
+      mainBox.onclick = function () { openGalleryNewTab(imgs, chart.name || "chart"); };
     } else {
       mainBox.innerHTML = '<span class="placeholder">no scan</span>';
       mainBox.onclick = null;
@@ -1602,7 +1640,7 @@
       extra.querySelectorAll(".file-line").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var idx = parseInt(btn.getAttribute("data-idx"), 10);
-          if (imgs[idx]) openImageNewTab(imgs[idx]);
+          if (imgs[idx]) openGalleryNewTab(imgs, chart.name || "chart");
         });
       });
     } else {
